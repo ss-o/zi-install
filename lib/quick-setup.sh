@@ -30,7 +30,7 @@ else
   if test -d "$WORKDIR"; then
     curl -fsSL "$SRC_INIT_URL" -o "${SRC_INIT}/script-init.sh"
     command chmod g-rwX "${SRC_INIT}/script-init.sh"
-    if -f "${SRC_INIT}/script-init.sh"; then
+    if test -f "${SRC_INIT}/script-init.sh"; then
       source "${SRC_INIT}/script-init.sh"
       SET_COLORS
       MSG_OK "Successfully initialized"

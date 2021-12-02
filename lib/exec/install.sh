@@ -5,10 +5,11 @@ WORKDIR="$(mktemp -d)"
 GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
 PBAR_URL="https://git.io/zi-process=bar"
+SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 ZI_VERSION="$(command git -C "${ZI_HOME}/${ZI_BIN_NAME}" describe --tags 2>/dev/null)"
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
-SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-SRC_INIT="${WORKDIR}/$(mktemp -t zi-source-init.XXXXXX)"
+SRC_INIT="${WORKDIR}/script-init.sh"
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
@@ -24,6 +25,7 @@ if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   else
     echo -e "No curl or wget available. Aborting."
     echo -e "Please install curl or wget and try again."
+    exit 1
   fi
   chmod a+x "$SRC_INIT"
   # shellcheck disable=SC1090

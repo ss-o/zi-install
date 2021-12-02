@@ -3,8 +3,9 @@
 SRC_INSTALL_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/exec/install.sh"
 SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 WORKDIR="(mktemp -d -t zi-work.XXXXXXXXXX)"
-SRC_INSTALL="${WORKDIR}/(mktemp -t zi-install.XXXXXXXXXX)"
-SRC_INIT="${WORKDIR}/$(mktemp -t zi-init.XXXXXXXXXX)"
+SRC_INSTALL="${WORKDIR}/install.sh"
+SRC_INIT="${WORKDIR}/script-init.sh"
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
@@ -12,6 +13,7 @@ while [ -h "$SOURCE" ]; do
   [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
 done
 ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+
 if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$SRC_INIT_URL" -o "$SRC_INIT"
@@ -22,6 +24,7 @@ if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   else
     echo -e "No curl or wget available. Aborting."
     echo -e "Please install curl or wget and try again."
+    exit 1
   fi
   chmod a+x "$SRC_INIT" "$SRC_INSTALL"
   # shellcheck disable=SC1090

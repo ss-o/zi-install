@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
-source "script-init.sh"
+
+SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
+SRC_INIT="$(mktemp)"
+if [[ ! -f '../script-init.sh' ]]; then
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$SRC_INIT_URL" -o "$SRC_INIT"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q "$SRC_INIT_URL" -O "$SRC_INIT"
+  else
+    echo -e "No curl or wget available. Aborting."
+    echo -e "Please install curl or wget and try again."
+  fi
+  chmod a+x "$SRC_INIT"
+  # shellcheck disable=SC1090
+  source "$SRC_INIT"
+  MSG_OK "Successfully installed source script, proceeding..."
+else
+  # Assume that repository cloned with script-init.sh
+  # shellcheck disable=SC1091
+  source '../script-init.sh'
+  MSG_OK "Source script found, proceeding..."
+fi
 
 SHOW_MENU() {
   while true; do
@@ -29,6 +50,7 @@ $TPDIM# ====================== # $TPRESET
         ;;
       3)
         MSG_INFO "CHOICE 3"
+        sleep 3
         ;;
       q | Q)
         clear

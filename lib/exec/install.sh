@@ -27,9 +27,9 @@ if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
     echo -e "Please install curl or wget and try again."
     exit 1
   fi
-  chmod a+x "$SRC_INIT"
+  chmod a+x "${SRC_INIT}/script-init.sh"
   # shellcheck disable=SC1090
-  source "$SRC_INIT"
+  source "${SRC_INIT}/script-init.sh"
   SET_COLORS
   MSG_OK "Successfully installed source script, proceeding..."
 else

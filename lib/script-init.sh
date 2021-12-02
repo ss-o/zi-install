@@ -1,8 +1,30 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
-WORKDIR="$(mktemp -d)"
+# SET_WORKDIR SET_PATHS SET_COLORS
 # shellcheck disable=SC2034
 REPO_TAG="$(git describe --tags)"
+
+SET_WORKDIR() {
+  if test -d "$(maketemp -d -t zi-workdir.XXXXXXXXXX)"; then
+    WORKDIR="(mktemp -d -t zi-workdir.XXXXXXXXXX)"
+  fi
+  if ! test -d "$WORKDIR"; then
+    WORKDIR="(mktemp -d)"
+  fi
+  if ! test -d "$WORKDIR"; then
+    WORKDIR="/tmp/zi-workdir$$"
+  fi
+  if ! test -d "$WORKDIR"; then
+    if test mkdir -p "$(pwd)/temp"; then
+      WORKDIR="$(pwd)/temp"
+      mkdir -p "$WORKDIR"
+    else
+      echo -e "Unable to create safe work environment to proceed."
+      echo -e "For assistance, please open new issue at https://github.com/zi-source/issues/new"
+      exit 1
+    fi
+  fi
+}
 
 # Function to setup the environment path.
 SET_PATHS() {
@@ -14,6 +36,7 @@ SET_PATHS() {
   done
   ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 }
+
 # Function enables colors for interactive shells.
 SET_COLORS() {
   TPRESET=""
@@ -48,7 +71,6 @@ SET_COLORS() {
   return 0
 }
 TITLE() {
-  clear
   printf "\033[30;46m"
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
   printf '%-*s\n' "${COLUMNS:-$(tput cols)}" "  # $1" | tr ' ' ' '
@@ -57,7 +79,6 @@ TITLE() {
   printf "\n"
 }
 NOTIFY() {
-  clear
   printf "\033[30;42m"
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
   printf '%-*s\n' "${COLUMNS:-$(tput cols)}" "  # $1" | tr ' ' ' '
@@ -106,10 +127,13 @@ MSG_OK() { echo -e "\e[0m[ ${TPGREEN}✔\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPGR
 MSG_ERR() { echo -e "\e[0m[ ${TPRED}✖\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPRED}${*}\e[0m ]"; }
 MSG_INFO() { echo -e "\e[0m[ ${TPBOLD}${TPYELLOW}➜\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPYELLOW}${*}\e[0m ]"; }
 MSG_NOTE() { echo -e "\e[0m[ ${TPBOLD}${TPCYAN}߹\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPCYAN}${*}\e[0m ]"; }
+CLEANUP() {
+  [[ -d "$WORKDIR" ]] && rm -rvf "$WORKDIR"
+}
 # Prints error message and exits with error code 1.
 ERROR() {
   MSG_ERR "$@" >&2
-  [[ -d "$WORKDIR" ]] && rm -rf "$WORKDIR"
+  CLEANUP
   exit 1
 }
 # Prints success message and exits with error code 0.
@@ -194,10 +218,9 @@ SYMLINK() {
   fi
 }
 START_WORK_SESSION() {
-  SESSION="session"
-  if [ ! -e "${WORKDIR}/${SESSION}" ]; then
+  if [ ! -e "${WORKDIR}" ]; then
     trap 'rm -rvf ${WORKDIR}; $?' INT TERM EXIT
-    MSG_OK "Session started" >"${WORKDIR}/${SESSION}"
+    echo -e "Session started" >"${WORKDIR}/session.log"
     "${@}"
     rm -rvf "${WORKDIR}"
     trap - INT TERM EXIT

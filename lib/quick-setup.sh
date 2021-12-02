@@ -266,7 +266,7 @@ DO_SELECTION() {
       bash "$(PWD)/exec/install.sh"
       exit 0
     else
-      bash <(https://git.io/zi-install)
+      bash <(curl -fsSF https://git.io/zi-install)
       exit 0
     fi
     ;;

@@ -8,8 +8,14 @@ ZI_VERSION="$(command git -C "${ZI_HOME}/${ZI_BIN_NAME}" describe --tags 2>/dev/
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
 SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 SRC_INIT="$(mktemp)"
-
-if [[ ! -f '../script-init.sh' ]]; then
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
+done
+ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$SRC_INIT_URL" -o "$SRC_INIT"
   elif command -v wget >/dev/null 2>&1; then
@@ -25,7 +31,7 @@ if [[ ! -f '../script-init.sh' ]]; then
 else
   # Assume that repository cloned with script-init.sh
   # shellcheck disable=SC1091
-  source '../script-init.sh'
+  source "${ABSOLUTE_PATH}/script-init.sh"
   MSG_OK "Source script found, proceeding..."
 fi
 

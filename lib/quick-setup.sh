@@ -1,25 +1,36 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
 
+SRC_INSTALL_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/exec/install.sh"
 SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-SRC_INIT="$(mktemp)"
-if [[ ! -f '../script-init.sh' ]]; then
+SRC_INSTALL="$(mktemp -t zi-install.XXXXXXXXXX)"
+SRC_INIT="$(mktemp -t zi-init.XXXXXXXXXX)"
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
+done
+ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$SRC_INIT_URL" -o "$SRC_INIT"
+    curl -fsSL "$SRC_INSTALL_URL" -o "$SRC_INSTALL"
   elif command -v wget >/dev/null 2>&1; then
     wget -q "$SRC_INIT_URL" -O "$SRC_INIT"
+    wget -q "$SRC_INSTALL_URL" -O "$SRC_INSTALL"
   else
     echo -e "No curl or wget available. Aborting."
     echo -e "Please install curl or wget and try again."
   fi
-  chmod a+x "$SRC_INIT"
+  chmod a+x "$SRC_INIT" "$SRC_INSTALL"
   # shellcheck disable=SC1090
   source "$SRC_INIT"
   MSG_OK "Successfully installed source script, proceeding..."
 else
   # Assume that repository cloned with script-init.sh
   # shellcheck disable=SC1091
-  source '../script-init.sh'
+  source "${ABSOLUTE_PATH}/script-init.sh"
   MSG_OK "Source script found, proceeding..."
 fi
 
@@ -30,9 +41,9 @@ SHOW_MENU() {
     echo -ne "
 $TPGREEN ❮ ZI ❯ Source$TPRESET v$REPO_TAG
 $TPDIM# ====================== # $TPRESET
-  $(CECHO '-green' '1)') Test 1
-  $(CECHO '-green' '2)') Test 2
-  $(CECHO '-green' '3)') Test 3
+  $(CECHO '-green' '1)') Just install ❮ ZI ❯
+  $(CECHO '-green' '2)') Build zshrc config.
+  $(CECHO '-green' '3)') Run install and build zshrc config.
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
 $TPDIM# ====================== # $TPRESET
@@ -41,8 +52,9 @@ $TPDIM# ====================== # $TPRESET
     if { [[ "${GET_OPTION}" =~ ^[A-Za-z0-9]+$ ]] || [[ "${GET_OPTION}" -gt 0 ]]; }; then
       case "${GET_OPTION}" in
       1)
-        TITLE "CHOICE 1"
-        sleep 3
+        TITLE "Install ❮ ZI ❯ (without zshrc)"
+        sleep 2
+        bash "$SRC_INSTALL"
         ;;
       2)
         NOTIFY "CHOICE 2"

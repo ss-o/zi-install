@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
-
 SRC_INSTALL_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/exec/install.sh"
 SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-SRC_INSTALL="$(mktemp -t zi-install.XXXXXXXXXX)"
-SRC_INIT="$(mktemp -t zi-init.XXXXXXXXXX)"
+WORKDIR="(mktemp -d -t zi-work.XXXXXXXXXX)"
+SRC_INSTALL="${WORKDIR}/(mktemp -t zi-install.XXXXXXXXXX)"
+SRC_INIT="${WORKDIR}/$(mktemp -t zi-init.XXXXXXXXXX)"
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
@@ -26,11 +26,13 @@ if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   chmod a+x "$SRC_INIT" "$SRC_INSTALL"
   # shellcheck disable=SC1090
   source "$SRC_INIT"
+  SET_COLORS
   MSG_OK "Successfully installed source script, proceeding..."
 else
   # Assume that repository cloned with script-init.sh
   # shellcheck disable=SC1091
   source "${ABSOLUTE_PATH}/script-init.sh"
+  SET_COLORS
   MSG_OK "Source script found, proceeding..."
 fi
 
@@ -40,13 +42,13 @@ SHOW_MENU() {
     SET_COLORS
     echo -ne "
 $TPGREEN ❮ ZI ❯ Source$TPRESET v$REPO_TAG
-$TPDIM# ====================== # $TPRESET
+$TPDIM# ============================================ # $TPRESET
   $(CECHO '-green' '1)') Just install ❮ ZI ❯
   $(CECHO '-green' '2)') Build zshrc config.
   $(CECHO '-green' '3)') Run install and build zshrc config.
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
-$TPDIM# ====================== # $TPRESET
+$TPDIM# =========================================== # $TPRESET
 "
     read -rp "$TPCYAN Please select an option:$TPRESET " GET_OPTION
     if { [[ "${GET_OPTION}" =~ ^[A-Za-z0-9]+$ ]] || [[ "${GET_OPTION}" -gt 0 ]]; }; then

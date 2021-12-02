@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
 
+WORKDIR="$(mktemp -d)"
 GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
 PBAR_URL="https://git.io/zi-process=bar"
 ZI_VERSION="$(command git -C "${ZI_HOME}/${ZI_BIN_NAME}" describe --tags 2>/dev/null)"
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
 SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-SRC_INIT="$(mktemp)"
+SRC_INIT="${WORKDIR}/$(mktemp -t zi-source-init.XXXXXX)"
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
@@ -27,11 +28,13 @@ if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
   chmod a+x "$SRC_INIT"
   # shellcheck disable=SC1090
   source "$SRC_INIT"
+  SET_COLORS
   MSG_OK "Successfully installed source script, proceeding..."
 else
   # Assume that repository cloned with script-init.sh
   # shellcheck disable=SC1091
   source "${ABSOLUTE_PATH}/script-init.sh"
+  SET_COLORS
   MSG_OK "Source script found, proceeding..."
 fi
 

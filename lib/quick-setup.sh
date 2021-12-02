@@ -13,7 +13,14 @@ trap '' SIGINT SIGQUIT SIGTERM
 : SRC_INIT="${WORKDIR}/script-init.sh"
 # shellcheck disable=SC2034
 REPO_TAG="$(git describe --tags)"
-
+SET_PATHS() {
+  while [ -h "$SOURCE" ]; do
+    ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
+  done
+  ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+}
 SET_WORKDIR() {
   WORKDIR="(mktemp -d -t zi-workdir.XXXXXXXXXX)"
   if test "$WORKDIR"; then
@@ -261,12 +268,13 @@ DO_SELECTION() {
   1)
     clear
     MSG_OK "Installing ❮ ZI ❯"
-    sleep 3
-    if [ -f "$(PWD)/exec/install.sh" ]; then
-      bash "$(PWD)/exec/install.sh"
+    sleep 2
+    SET_PATHS
+    if [ -f "${ABSOLUTE_PATH}/exec/install.sh" ]; then
+      bash "${ABSOLUTE_PATH}/exec/install.sh"
       exit 0
     else
-      bash <(curl -fsSF https://git.io/zi-install)
+      curl -fsSF https://git.io/zi-install -o "${WORKDIR}/install.sh"
       exit 0
     fi
     ;;

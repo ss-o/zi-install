@@ -1,44 +1,13 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
-
+# shellcheck disable=SC1091
+[[ -f "script-init.sh" ]] && source script-init.sh
 WORKDIR="$(mktemp -d)"
 GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
 PBAR_URL="https://git.io/zi-process=bar"
-SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 ZI_VERSION="$(command git -C "${ZI_HOME}/${ZI_BIN_NAME}" describe --tags 2>/dev/null)"
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
-SRC_INIT="${WORKDIR}/script-init.sh"
-
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do
-  ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
-done
-ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-if [[ ! -f "${ABSOLUTE_PATH}/script-init.sh" ]]; then
-  if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "$SRC_INIT_URL" -o "$SRC_INIT"
-  elif command -v wget >/dev/null 2>&1; then
-    wget -q "$SRC_INIT_URL" -O "$SRC_INIT"
-  else
-    echo -e "No curl or wget available. Aborting."
-    echo -e "Please install curl or wget and try again."
-    exit 1
-  fi
-  chmod a+x "${SRC_INIT}/script-init.sh"
-  # shellcheck disable=SC1090
-  source "${SRC_INIT}/script-init.sh"
-  SET_COLORS
-  MSG_OK "Successfully installed source script, proceeding..."
-else
-  # Assume that repository cloned with script-init.sh
-  # shellcheck disable=SC1091
-  source "${ABSOLUTE_PATH}/script-init.sh"
-  SET_COLORS
-  MSG_OK "Source script found, proceeding..."
-fi
 
 # Hardcoding is something that should be avoided as much as possible.
 # If you hardcode something on your code it will completely "destroy" the portability of your code in a great extent.

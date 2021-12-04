@@ -4,7 +4,7 @@
 WORKDIR="$(mktemp -d)"
 GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
-PBAR_URL="https://git.io/zi-process=bar"
+PBAR_URL="https://raw.githubusercontent.com/z-shell/zi/main/lib/zsh/git-process-output.zsh"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
 ZI_INIT="${WORKDIR}/zi-init.zsh"
@@ -85,19 +85,23 @@ DO_INSTALL() {
     git clean -d -f -f && MSG_INFO "Cleaned up the repository"
     git reset -q --hard HEAD && MSG_INFO "Reseting the index and working tree"
     git pull -q origin main && MSG_OK "Succesfully updated"
-    MSG_NOTE "❮ ZI ❯ Origin: $(GIT_O)"
-    MSG_NOTE "❮ ZI ❯ Version: $(GIT_V)"
+    MSG_OK "❮ ZI ❯ Origin: $(GIT_O)"
+    MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
   fi
   if [[ ! -f "$ZI_SOURCE" ]]; then
     builtin cd "$ZI_HOME" || ERROR "Something went wrong while changing directory"
     printf "\033[34;01m▓▒░\033[31;01m Installing the (\033[34;01m…Z-Shell…\033[36;01m…❮ ZI ❯…\033[31;01m)\n\033[0m"
     printf "\033[34;01m▓▒░\033[31;1m Interactive feature-rich plugin manager for (\033[34;01m…ZSH…\033[31;01m)\n\033[0m"
-    { git clone -q --depth 1 --progress "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { "$PROGRESS_BAR" || cat; }; } 2>/dev/null
+
+    {
+      command git clone --progress "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { "$PROGRESS_BAR" || cat; }
+    } 2>/dev/null
+
     if [[ -f "$ZI_SOURCE" ]]; then
       builtin cd "${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory"
       MSG_OK "Installation successful."
-      MSG_NOTE "❮ ZI ❯ Origin: $(GIT_O)"
-      MSG_NOTE "❮ ZI ❯ Version: $(GIT_V)"
+      MSG_OK "❮ ZI ❯ Origin: $(GIT_O)"
+      MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
     else
       MSG_ERR "The clone has failed."
       ERROR "Please report issue to https://github.com/z-shell/zi/issues/new"

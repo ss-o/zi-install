@@ -90,9 +90,9 @@ DO_INSTALL() {
   fi
   if [[ ! -f "$ZI_SOURCE" ]]; then
     builtin cd "$ZI_HOME" || ERROR "Something went wrong while changing directory"
-    printf "\033[34;01m▓▒░\033[31;01m Installing the (\033[34;01m…Z-Shell…\033[36;01m…❮ ZI ❯…\033[31;01m)\n\033[0m"
-    printf "\033[34;01m▓▒░\033[31;1m Interactive feature-rich plugin manager for (\033[34;01m…ZSH…\033[31;01m)\n\033[0m"
-    { GIT_E clone -q --progress "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { $PROGRESS_BAR || cat; }; } 2>/dev/null
+    MSG_NOTE "Installing the (\033[34;01m…Z-Shell…\033[36;01m …❮ ZI ❯…)\033[0m"
+    MSG_NOTE "Interactive feature-rich plugin manager for (\033[34;01m…ZSH…\033[36;01m)\033[0m"
+    { GIT_E clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { $PROGRESS_BAR || cat; }; } 2>/dev/null
     if [[ -f "$ZI_SOURCE" ]]; then
       builtin cd "${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory"
       MSG_OK "❮ ZI ❯ Installed successfully"

@@ -128,7 +128,7 @@ MSG_ERR() { echo -e "\e[0m[ ${TPRED}✖\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPRED
 MSG_INFO() { echo -e "\e[0m[ ${TPBOLD}${TPYELLOW}➜\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPYELLOW}${*}\e[0m ]"; }
 MSG_NOTE() { echo -e "\e[0m[ ${TPBOLD}${TPCYAN}߹\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPCYAN}${*}\e[0m ]"; }
 CLEANUP() {
-  [[ -d "$WORKDIR" ]] && rm -rvf "$WORKDIR"
+  [[ -d "$WORKDIR" ]] && rm -rf "$WORKDIR"
 }
 # Prints error message and exits with error code 1.
 ERROR() {

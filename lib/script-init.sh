@@ -123,12 +123,13 @@ CECHO() {
   fi
 }
 # Message functions to print messages to the user.
-MSG_OK() { echo -e "\e[0m[ ${TPGREEN}✔\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPGREEN}${*}\e[0m ]"; }
-MSG_ERR() { echo -e "\e[0m[ ${TPRED}✖\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPRED}${*}\e[0m ]"; }
+MSG_OK() { echo -e "\e[0m[ ${TPGREEN}✔\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPGREEN}${*}\e[0m ]"; }
+MSG_ERR() { echo -e "\e[0m[ ${TPRED}✖\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPRED}${*}\e[0m ]"; }
 MSG_INFO() { echo -e "\e[0m[ ${TPBOLD}${TPYELLOW}➜\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPYELLOW}${*}\e[0m ]"; }
 MSG_NOTE() { echo -e "\e[0m[ ${TPBOLD}${TPCYAN}߹\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPCYAN}${*}\e[0m ]"; }
 CLEANUP() {
   [[ -d "$WORKDIR" ]] && rm -rf "$WORKDIR"
+  MSG_INFO "Removed temporary directory: $WORKDIR"
 }
 # Prints error message and exits with error code 1.
 ERROR() {

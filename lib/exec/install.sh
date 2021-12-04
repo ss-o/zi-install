@@ -6,8 +6,6 @@ GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
 PBAR_URL="https://git.io/zi-process=bar"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-ZI_REPO_VERSION="$(command git describe --tags 2>/dev/null)"
-ORIGIN="$(command git config -l | grep remote.origin.url | awk -F'=' '{print $2}')"
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
 ZI_INIT="${WORKDIR}/zi-init.zsh"
 
@@ -24,6 +22,9 @@ WGET() { wget "$1" --quiet --show-progress; }
 CURL() { curl -fSL --progress-bar "$1" -o "$2"; }
 CMD() { command -v "$1" >/dev/null 2>&1; }
 EXEC() { type -fP "$1" >/dev/null 2>&1; }
+GIT_E() { command git -C "${ZI_HOME}/${ZI_BIN_DIR}" "$@"; }
+GIT_V() { GIT_E describe --tags 2>/dev/null; }
+GIT_O() { GIT_E config -l | grep remote.origin.url | awk -F'=' '{print $2}'; }
 PRE_CHECKS() {
   if CMD zsh; then
     echo -e "$(zsh --version) found on the system, proceeding..."
@@ -79,13 +80,13 @@ SET_DIR() {
 DO_INSTALL() {
   if [[ -d "${ZI_HOME}/${ZI_BIN_DIR}/.git" ]]; then
     builtin cd "${ZI_HOME}/${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory to ${ZI_HOME}/${ZI_BIN_DIR}"
-    MSG_NOTE "We found origin $ORIGIN in the ❮ ZI ❯ source directory. Updating..."
+    MSG_NOTE "We found origin $(GIT_O) in the ❮ ZI ❯ source directory. Updating..."
     MSG_INFO "Re-initializing Z-Shell ❮ ZI ❯ at ${ZI_HOME}/${ZI_BIN_DIR}"
     git clean -d -f -f && MSG_INFO "Cleaned up the repository"
     git reset -q --hard HEAD && MSG_INFO "Reseting the index and working tree"
     git pull -q origin main && MSG_OK "Succesfully updated"
-    MSG_NOTE "❮ ZI ❯ Origin: $ORIGIN"
-    MSG_NOTE "❮ ZI ❯ Version: $ZI_REPO_VERSION"
+    MSG_NOTE "❮ ZI ❯ Origin: $(GIT_O)"
+    MSG_NOTE "❮ ZI ❯ Version: $(GIT_V)"
   fi
   if [[ ! -f "$ZI_SOURCE" ]]; then
     builtin cd "$ZI_HOME" || ERROR "Something went wrong while changing directory"
@@ -95,8 +96,8 @@ DO_INSTALL() {
     if [[ -f "$ZI_SOURCE" ]]; then
       builtin cd "${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory"
       MSG_OK "Installation successful."
-      MSG_NOTE "❮ ZI ❯ Origin: $ORIGIN"
-      MSG_NOTE "❮ ZI ❯ Version: $ZI_REPO_VERSION"
+      MSG_NOTE "❮ ZI ❯ Origin: $(GIT_O)"
+      MSG_NOTE "❮ ZI ❯ Version: $(GIT_V)"
     else
       MSG_ERR "The clone has failed."
       ERROR "Please report issue to https://github.com/z-shell/zi/issues/new"

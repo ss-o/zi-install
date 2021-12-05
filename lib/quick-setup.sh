@@ -96,7 +96,7 @@ DO_SELECTION() {
     ;;
   2)
     clear
-    NOTIFY "Creating zshrc file"
+    NOTIFY "Creating .zshrc file"
     sleep 1
     $DOWNLOAD "$ZI_CREATE_RC_URL" "$ZI_CREATE_RC" && command chmod g-rwX "$ZI_CREATE_RC"
     builtin source "$ZI_CREATE_RC"
@@ -120,7 +120,7 @@ DO_SELECTION() {
 }
 DO_OPTIONS() {
   if HAS_TERMINAL; then
-    export TERM="xterm-256color"
+    TERM="xterm-256color"
   fi
   if ! IS_TTY; then
     NO_TTY=yes

@@ -1,0 +1,4 @@
+# Theme oh-my-zsh - robbyrussell
+zi wait'!' lucid for \
+  OMZL::prompt_info_functions.zsh \
+  OMZT::robbyrussell

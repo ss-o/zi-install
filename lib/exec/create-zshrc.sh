@@ -176,7 +176,7 @@ if CONTINUE; then
   exit 0
 fi
   if [[ -f "$ZI_P10K_HEAD" ]]; then
-    cat "$ZI_P10K_HEAD" >>"$HOME/.zshrc"
+    cat "$ZI_P10K_HEAD" >>"${HOME}/.zshrc"
   fi
   if [[ ! -f "$ZI_HEAD" ]]; then
     $DOWNLOAD "$ZI_HEAD_URL" "$ZI_HEAD"
@@ -218,11 +218,11 @@ DO_OPTIONS() {
   done
   while [ $# -gt 0 ]; do
     case $1 in
-    -i | --install)
+    -1)
       GET_OPTION="1"
       DO_SELECTION
       ;;
-    -c | --config)
+    -2)
       GET_OPTION="2"
       DO_SELECTION
       ;;

@@ -133,7 +133,7 @@ DO_SELECTION() {
     $DOWNLOAD "$ZI_P10K_HEAD_URL" "$ZI_P10K_HEAD"
     $DOWNLOAD "$ZI_P10K_PROMT_URL" "$ZI_P10K_PROMT"
     NOTIFY "Added powerlevel10k theme"
-    sleep 3
+    sleep 2
     ;;
   c | C)
     clear

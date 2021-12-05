@@ -1,6 +1,8 @@
-[[ -z "$ZI_HOME" ]] && ZI_HOME="${ZI_HOME:-${ZDOTDIR:-$HOME}/.zi}"
-[[ -z "$ZI_BIN_DIR" ]] && ZI_BIN_DIR="${ZI_BIN_DIR:-bin}"
-ZI_SOURCE="${ZI_SOURCE:-${ZI_HOME}/${ZI_BIN_DIR}/zi.zsh}"
+# ZI Auto setup and load
+[[ -z "$ZI_HOME" ]]     && ZI_HOME="${ZI_HOME:-${ZDOTDIR:-$HOME}/.zi}"
+[[ -z "$ZI_BIN_DIR" ]]  && ZI_BIN_DIR="${ZI_BIN_DIR:-bin}"
+[[ -z "$ZI_SOURCE" ]]   && ZI_SOURCE="${ZI_SOURCE:-${ZI_HOME}/${ZI_BIN_DIR}/zi.zsh}"
+# ZI Install
 if [[ ! -f "$ZI_SOURCE" ]]; then
 print -P "%F{33}▓▒░ %F{160}Installing (%F{33}Z-Shell/ZI%F{160})%f%b"
 print -P "%F{33}▓▒░ %F{160}Interactive plugin manager for %F{33}…ZSH…%F{160}%f%b"
@@ -12,6 +14,7 @@ print -P "%F{33}▓▒░ %F{160}Interactive plugin manager for %F{33}…ZSH…%
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
     fi
 fi
+# ZI load
 source "$ZI_SOURCE"
 autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi

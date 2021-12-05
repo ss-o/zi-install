@@ -1,3 +1,3 @@
-# For p10k wizard question 'Apply changes to ~/.zshrc?' choose no.
-zi ice depth=1 atload'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' nocd
+# Load powervelelp10k
+zi ice depth=1
 zi light romkatv/powerlevel10k

@@ -2,7 +2,6 @@
 
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
 
-TERM="xterm-256color"
 NO_TTY="${NO_TTY:-no}"
 PIPED="${PIPED:-no}"
 WORKDIR="$(mktemp -d)"
@@ -121,8 +120,7 @@ DO_SELECTION() {
 }
 DO_OPTIONS() {
   if HAS_TERMINAL; then
-    export TERM
-    echo "$TERM"
+    export TERM="xterm-256color"
   fi
   if ! IS_TTY; then
     NO_TTY=yes

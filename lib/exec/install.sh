@@ -77,12 +77,10 @@ SET_DIR() {
 DO_INSTALL() {
   if [[ -d "${ZI_HOME}/${ZI_BIN_DIR}/.git" ]]; then
     builtin cd "${ZI_HOME}/${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory to ${ZI_HOME}/${ZI_BIN_DIR}"
-    MSG_NOTE "We found origin $(GIT_O) in the ❮ ZI ❯ source directory. Updating..."
+    MSG_NOTE "We found ❮ ZI ❯ directory. Updating..."
     MSG_INFO "Re-initializing Z-Shell ❮ ZI ❯ at ${ZI_HOME}/${ZI_BIN_DIR}"
     git clean -d -f -f && MSG_INFO "Cleaned up the repository"
     git reset -q --hard HEAD && MSG_INFO "Reseting the index and working tree"
-    git pull -q origin main && MSG_OK "Succesfully updated"
-    MSG_OK "❮ ZI ❯ Origin: $(GIT_O)"
     MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
   fi
   if [[ ! -f "$ZI_SOURCE" ]]; then
@@ -93,7 +91,6 @@ DO_INSTALL() {
     if [[ -f "$ZI_SOURCE" ]]; then
       builtin cd "${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory"
       MSG_OK "❮ ZI ❯ Installed successfully"
-      MSG_OK "❮ ZI ❯ Origin: $(GIT_O)"
       MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
     else
       MSG_ERR "The clone has failed."

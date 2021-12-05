@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
-# SET_WORKDIR SET_PATHS SET_COLORS
-# shellcheck disable=SC2034
-REPO_TAG="$(git describe --tags)"
 
 SET_WORKDIR() {
   if test -d "$(maketemp -d -t zi-workdir.XXXXXXXXXX)"; then
@@ -129,7 +126,7 @@ MSG_INFO() { echo -e "\e[0m[ ${TPBOLD}${TPYELLOW}➜\e[0m ]${TPBOLD} ➜➜➜ \
 MSG_NOTE() { echo -e "\e[0m[ ${TPBOLD}${TPCYAN}߹\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPCYAN}${*}\e[0m ]"; }
 CLEANUP() {
   [[ -d "$WORKDIR" ]] && rm -rf "$WORKDIR"
-  MSG_INFO "Removed temporary directory: $WORKDIR"
+  MSG_INFO "Removed temporary work directory: $WORKDIR"
 }
 # Prints error message and exits with error code 1.
 ERROR() {

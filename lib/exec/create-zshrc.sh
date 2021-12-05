@@ -167,14 +167,15 @@ DO_SELECTION() {
   shift
 }
 CREATE_ZSHRC() {
-if [[ -f "$ZI_ZSHRC" ]]; then
-MSG_INFO "File .zshrc already exists, overwrite or exit?"
-if CONTINUE; then
-  rm -rf "$ZI_ZSHRC"
-  else
-  CLEANUP
-  exit 0
-fi
+  if [[ -f "$ZI_ZSHRC" ]]; then
+    MSG_INFO "File .zshrc already exists, overwrite or exit?"
+    if CONTINUE; then
+      rm -rf "$ZI_ZSHRC"
+    else
+      CLEANUP
+      exit 0
+    fi
+  fi
   if [[ -f "$ZI_P10K_HEAD" ]]; then
     cat "$ZI_P10K_HEAD" >>"${HOME}/.zshrc"
   fi
@@ -207,8 +208,7 @@ fi
 
 DO_OPTIONS() {
   if HAS_TERMINAL; then
-    export TERM
-    echo "$TERM"
+    export TERM="xterm-256color"
   fi
   if ! IS_TTY; then
     NO_TTY=yes
@@ -217,7 +217,7 @@ DO_OPTIONS() {
     SHOW_MENU "${@}"
   done
   while [ $# -gt 0 ]; do
-    case $1 in
+    case "$1" in
     -1)
       GET_OPTION="1"
       DO_SELECTION

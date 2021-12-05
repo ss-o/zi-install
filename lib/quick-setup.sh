@@ -92,7 +92,7 @@ DO_SELECTION() {
     sleep 1
     $DOWNLOAD "$ZI_INSTALL_URL" "$ZI_INSTALL" && command chmod g-rwX "$ZI_INSTALL"
     builtin source "$ZI_INSTALL"
-    sleep 1
+    sleep 3
     ;;
   2)
     clear
@@ -100,7 +100,7 @@ DO_SELECTION() {
     sleep 1
     $DOWNLOAD "$ZI_CREATE_RC_URL" "$ZI_CREATE_RC" && command chmod g-rwX "$ZI_CREATE_RC"
     builtin source "$ZI_CREATE_RC"
-    sleep 1
+    sleep 3
     ;;
   q | Q)
     clear

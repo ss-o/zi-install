@@ -1,3 +1,4 @@
+# (you can use 'setopt' command to show options enabled and 'unsetopt' to show which are not enabled)
 # Remove '#' to enable
 #setopt bang_hist               # Treat The '!' Character Specially During Expansion.
 #setopt hist_ignore_all_dups    # remove older duplicate entries from history

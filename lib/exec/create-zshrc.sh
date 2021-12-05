@@ -169,8 +169,8 @@ DO_SELECTION() {
 }
 CREATE_ZSHRC() {
   if [[ -f "$ZI_ZSHRC" ]]; then
-    MSG_INFO "File .zshrc already exists"
-    echo -e "Press [y] to overwrite, [n] to exit, default is [n]"
+    MSG_INFO "File .zshrc already exists, please select an option:"
+    MSG_NOTE "Press [y] to overwrite, [n] to exit, default is [n]"
     if CONTINUE; then
       rm -rf "$ZI_ZSHRC"
     else
@@ -229,6 +229,30 @@ DO_OPTIONS() {
       ;;
     -2)
       GET_OPTION="2"
+      DO_SELECTION
+      ;;
+    -3)
+      GET_OPTION="3"
+      DO_SELECTION
+      ;;
+    -4)
+      GET_OPTION="4"
+      DO_SELECTION
+      ;;
+    -5)
+      GET_OPTION="5"
+      DO_SELECTION
+      ;;
+    -6)
+      GET_OPTION="6"
+      DO_SELECTION
+      ;;
+    -7)
+      GET_OPTION="7"
+      DO_SELECTION
+      ;;
+    -c)
+      GET_OPTION="c"
       DO_SELECTION
       ;;
     *) ERORR "Unknown option, please try again" ;;

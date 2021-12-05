@@ -8,6 +8,7 @@ PIPED="${PIPED:-no}"
 WORKDIR="$(mktemp -d)"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 ZI_INIT="${WORKDIR}/script-init.sh"
+ZI_ZSHRC="${HOME}/.zshrc"
 
 ZI_P10K_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-head"
 ZI_P10K_PROMT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-prompt"
@@ -96,52 +97,52 @@ DO_SELECTION() {
     clear
     $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
     NOTIFY "Added setopt"
-    sleep 2
+    sleep 3
     ;;
   2)
     clear
     $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
     NOTIFY "Added zstyle"
-    sleep 2
+    sleep 3
     ;;
   3)
     clear
     $DOWNLOAD "$ZI_OMZ_LIB_URL" "$ZI_OMZ_LIB"
     NOTIFY "Added oh-my-zsh library"
-    sleep 2
+    sleep 3
     ;;
   4)
     clear
     $DOWNLOAD "$ZI_OMZ_PLUG_URL" "$ZI_OMZ_PLUG"
     NOTIFY "Added oh-my-zsh plugins"
-    sleep 2
+    sleep 3
     ;;
   5)
     clear
     $DOWNLOAD "$ZI_ANNEX_META_URL" "$ZI_ANNEX_META"
     NOTIFY "Added annexes + meta plugins"
-    sleep 2
+    sleep 3
     ;;
   6)
     clear
     $DOWNLOAD "$ZI_REC_PLUG_URL" "$ZI_REC_PLUG"
     NOTIFY "Added recommended plugins"
-    sleep 2
+    sleep 3
     ;;
   7)
     clear
     $DOWNLOAD "$ZI_P10K_HEAD_URL" "$ZI_P10K_HEAD"
     $DOWNLOAD "$ZI_P10K_PROMT_URL" "$ZI_P10K_PROMT"
     NOTIFY "Added powerlevel10k theme"
-    sleep 2
+    sleep 3
     ;;
   c | C)
     clear
     NOTIFY "Creating .zshrc"
-    sleep 1
+    sleep 2
     CREATE_ZSHRC
     MSG_OK "Created .zshrc"
-    sleep 1
+    sleep 2
     MSG_NOTE "Review/edit your .zshrc file"
     sleep 2
     MSG_NOTE "Reload your shell for changes to take effect"
@@ -166,6 +167,14 @@ DO_SELECTION() {
   shift
 }
 CREATE_ZSHRC() {
+if [[ -f "$ZI_ZSHRC" ]]; then
+MSG_INFO "File .zshrc already exists, overwrite or exit?"
+if CONTINUE; then
+  rm -rf "$ZI_ZSHRC"
+  else
+  CLEANUP
+  exit 0
+fi
   if [[ -f "$ZI_P10K_HEAD" ]]; then
     cat "$ZI_P10K_HEAD" >>"$HOME/.zshrc"
   fi

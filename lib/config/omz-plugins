@@ -1,0 +1,5 @@
+# Oh-My-Zsh Plugins
+zi light-mode for \
+  OMZP::sudo OMZP::extract \
+  OMZP::encode64 OMZP::git-extras \
+  OMZP::colorize OMZP::ssh-agent OMZP::gpg-agent

@@ -72,7 +72,7 @@ SHOW_MENU() {
     echo -ne "
 $TPGREEN❮ ZI ❯ Source$TPRESET
 $TPDIM# ---============================================--- # $TPRESET
-  $(CECHO '-green' '1)') Install ❮ ZI ❯
+  $(CECHO '-green' '1)') Install/Update ❮ ZI ❯
   $(CECHO '-green' '2)') Create .zshrc
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit

@@ -9,6 +9,16 @@ WORKDIR="$(mktemp -d)"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 ZI_INIT="${WORKDIR}/script-init.sh"
 
+ZI_P10K_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-head"
+ZI_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/head"
+ZI_SETOPT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/setopt"
+ZI_ZSTYLE_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/zstyle"
+
+ZI_P10K_HEAD="${WORKDIR}/p10k-head"
+ZI_HEAD="${WORKDIR}/head"
+ZI_SETOPT="${WORKDIR}/setopt"
+ZI_ZSTYLE="${WORKDIR}/zstyle"
+
 # Message functions to print messages to the user.
 WGET() { wget "$1" --quiet --show-progress; }
 CURL() { curl -fSL --progress-bar "$1" -o "$2"; }
@@ -52,8 +62,9 @@ SHOW_MENU() {
     echo -ne "
 $TPGREEN❮ ZI ❯ Source$TPRESET
 $TPDIM# ---============================================--- # $TPRESET
-  $(CECHO '-green' '1)') Add setopt's to zshrc
+  $(CECHO '-green' '1)') Add setopt .zshrc
   $(CECHO '-green' '2)') Add zstyle .zshrc
+  $(CECHO '-yellow' 'c)') Create .zshrc
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
 $TPDIM# ---===========================================--- # $TPRESET
@@ -69,15 +80,25 @@ DO_SELECTION() {
   1)
     clear
     NOTIFY "CHOICE 1"
-    ADD_OPTION_1=yes
-    DO_TEMPLATE
+    $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
+    MSG_OK "Added setopt .zshrc"
     sleep 2
     ;;
   2)
     clear
     NOTIFY "CHOICE 2"
-    ADD_OPTION_2=yes
-    DO_TEMPLATE
+    $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
+    MSG_OK "Added zstyle .zshrc"
+    ;;
+  3)
+    clear
+    NOTIFY "CHOICE 3"
+    sleep 2
+    ;;
+  c | C)
+    clear
+    NOTIFY "CHOICE 10"
+    CREATE_ZSHRC
     sleep 2
     ;;
   q | Q)
@@ -96,12 +117,16 @@ DO_SELECTION() {
   esac
   shift
 }
-DO_TEMPLATE() {
-  if [[ $ADD_OPTION_1 = yes ]]; then
-    $DOWNLOAD
+CREATE_ZSHRC() {
+  if [[ -f "$ZI_HEAD" ]]; then
+    $DOWNLOAD "$ZI_HEAD_URL" "$ZI_HEAD"
+    cat "$ZI_HEAD" >>"${HOME}/.zshrc"
   fi
-  if [[ $ADD_OPTION_2 = yes ]]; then
-    $DOWNLOAD
+  if [[ -f "$ZI_SETOPT" ]]; then
+    cat "$ZI_SETOPT" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_ZSTYLE" ]]; then
+    cat "$ZI_ZSTYLE" >>"${HOME}/.zshrc"
   fi
 }
 

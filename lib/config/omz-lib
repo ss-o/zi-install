@@ -1,0 +1,10 @@
+# Oh-My-Zsh Library
+setopt prompt_subst
+setopt promptsubst
+
+zi light-mode for \
+  OMZL::git.zsh atload"unalias grv g" OMZP::git \
+  atinit"HIST_STAMPS=dd.mm.yyyy" OMZL::history.zsh \
+  OMZL::compfix.zsh OMZL::clipboard.zsh OMZL::functions.zsh \
+  OMZL::completion.zsh OMZL::directories.zsh OMZL::grep.zsh \
+  OMZL::key-bindings.zsh OMZL::spectrum.zsh OMZL::termsupport.zsh

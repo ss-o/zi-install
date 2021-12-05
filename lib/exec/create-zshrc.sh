@@ -13,11 +13,19 @@ ZI_P10K_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/conf
 ZI_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/head"
 ZI_SETOPT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/setopt"
 ZI_ZSTYLE_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/zstyle"
+ZI_ANNEX_META_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/annex-meta-plugins"
+ZI_OMZ_LIB_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omz-lib"
+ZI_OMZ_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omz-plugins"
+ZI_REC_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rec-plugins"
 
 ZI_P10K_HEAD="${WORKDIR}/p10k-head"
 ZI_HEAD="${WORKDIR}/head"
 ZI_SETOPT="${WORKDIR}/setopt"
 ZI_ZSTYLE="${WORKDIR}/zstyle"
+ZI_ANNEX_META="${WORKDIR}/annex-meta-plugins"
+ZI_OMZ_LIB="${WORKDIR}/omz-lib"
+ZI_OMZ_PLUG="${WORKDIR}/omz-plugins"
+ZI_REC_PLUG_URL="${WORKDIR}/rec-plugins"
 
 # Message functions to print messages to the user.
 WGET() { wget "$1" --quiet --show-progress; }

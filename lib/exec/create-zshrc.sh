@@ -10,6 +10,7 @@ ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-in
 ZI_INIT="${WORKDIR}/script-init.sh"
 
 ZI_P10K_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-head"
+ZI_P10K_PROMT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-prompt"
 ZI_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/head"
 ZI_SETOPT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/setopt"
 ZI_ZSTYLE_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/zstyle"
@@ -19,6 +20,7 @@ ZI_OMZ_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/confi
 ZI_REC_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rec-plugins"
 
 ZI_P10K_HEAD="${WORKDIR}/p10k-head"
+ZI_P10K_PROMT="${WORKDIR}/p10k-prompt"
 ZI_HEAD="${WORKDIR}/head"
 ZI_SETOPT="${WORKDIR}/setopt"
 ZI_ZSTYLE="${WORKDIR}/zstyle"
@@ -70,8 +72,13 @@ SHOW_MENU() {
     echo -ne "
 $TPGREEN❮ ZI ❯ Source$TPRESET
 $TPDIM# ---============================================--- # $TPRESET
-  $(CECHO '-green' '1)') Add setopt .zshrc
-  $(CECHO '-green' '2)') Add zstyle .zshrc
+  $(CECHO '-green' '1)') Add setopt
+  $(CECHO '-green' '2)') Add zstyle
+  $(CECHO '-green' '3)') Oh-My-Zsh library
+  $(CECHO '-green' '4)') Oh-My-Zsh plugins
+  $(CECHO '-green' '5)') Annexes + meta plugins
+  $(CECHO '-green' '6)') Recommended plugins
+  $(CECHO '-green' '7)') Powerlevel10k theme
   $(CECHO '-yellow' 'c)') Create .zshrc
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
@@ -87,20 +94,52 @@ DO_SELECTION() {
   case "${GET_OPTION}" in
   1)
     clear
-    NOTIFY "CHOICE 1"
+    NOTIFY "Zsh setopt"
     $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
-    MSG_OK "Added setopt .zshrc"
+    MSG_OK "Added setopt"
     sleep 2
     ;;
   2)
     clear
-    NOTIFY "CHOICE 2"
+    NOTIFY "Zsh zstyle"
     $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
-    MSG_OK "Added zstyle .zshrc"
+    MSG_OK "Added zstyle"
+    sleep 2
     ;;
   3)
     clear
-    NOTIFY "CHOICE 3"
+    NOTIFY "Creating oh-my-zsh library"
+    $DOWNLOAD "$ZI_OMZ_LIB_URL" "$ZI_OMZ_LIB"
+    MSG_OK "Added oh-my-zsh library"
+    sleep 2
+    ;;
+  4)
+    clear
+    NOTIFY "Creating oh-my-zsh plugins"
+    $DOWNLOAD "$ZI_OMZ_PLUG_URL" "$ZI_OMZ_PLUG"
+    MSG_OK "Added oh-my-zsh plugins"
+    sleep 2
+    ;;
+  5)
+    clear
+    NOTIFY "Creating annexes + meta plugins"
+    $DOWNLOAD "$ZI_ANNEX_META_URL" "$ZI_ANNEX_META"
+    MSG_OK "Added annexes + meta plugins"
+    sleep 2
+    ;;
+  6)
+    clear
+    NOTIFY "Creating recommended plugins"
+    $DOWNLOAD "$ZI_REC_PLUG_URL" "$ZI_REC_PLUG"
+    MSG_OK "Added recommended plugins"
+    sleep 2
+    ;;
+  7)
+    clear
+    NOTIFY "Creating powerlevel10k theme"
+    $DOWNLOAD "$ZI_P10K_HEAD_URL" "$ZI_P10K_HEAD"
+    $DOWNLOAD "$ZI_P10K_PROMT_URL" "$ZI_P10K_PROMT"
+    MSG_OK "Added powerlevel10k theme"
     sleep 2
     ;;
   c | C)
@@ -114,7 +153,7 @@ DO_SELECTION() {
     MSG_NOTE "For any questions, your are welcome to discuss them on:"
     MSG_INFO "❮ ZI ❯ GitHub https://github.com/z-shell/zi/discussions"
     CLEANUP
-    FINISHED "Session finished successfully"
+    return 0
     ;;
   *)
     clear && MSG_NOTE "Invalid option, please try again"
@@ -126,7 +165,10 @@ DO_SELECTION() {
   shift
 }
 CREATE_ZSHRC() {
-  if [[ -f "$ZI_HEAD" ]]; then
+  if [[ -f "$ZI_P10K_HEAD" ]]; then
+    cat "$ZI_P10K_HEAD" >>"$HOME/.zshrc"
+  fi
+  if [[ ! -f "$ZI_HEAD" ]]; then
     $DOWNLOAD "$ZI_HEAD_URL" "$ZI_HEAD"
     cat "$ZI_HEAD" >>"${HOME}/.zshrc"
   fi
@@ -135,6 +177,21 @@ CREATE_ZSHRC() {
   fi
   if [[ -f "$ZI_ZSTYLE" ]]; then
     cat "$ZI_ZSTYLE" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_OMZ_LIB" ]]; then
+    cat "$ZI_OMZ_LIB" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_OMZ_PLUG" ]]; then
+    cat "$ZI_OMZ_PLUG" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_ANNEX_META" ]]; then
+    cat "$ZI_ANNEX_META" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_REC_PLUG" ]]; then
+    cat "$ZI_REC_PLUG" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_P10K_PROMT" ]]; then
+    cat "$ZI_P10K_PROMT" >>"${HOME}/.zshrc"
   fi
 }
 
@@ -169,7 +226,6 @@ MAIN() {
   # shellcheck disable=SC1090
   GET_SOURCE && SET_COLORS
   DO_OPTIONS "${@}"
-  CLEANUP
   return 0
 }
 

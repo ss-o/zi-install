@@ -8,6 +8,8 @@ ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 : PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
 ZI_INIT="${WORKDIR}/script-init.zsh"
+ZI_ZSHRC_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/temp_zshrc"
+ZI_ZSHRC="${WORKDIR}/temp_zshrc"
 
 # Hardcoding is something that should be avoided as much as possible.
 # If you hardcode something on your code it will completely "destroy" the portability of your code in a great extent.
@@ -74,6 +76,21 @@ SET_DIR() {
     MSG_OK "Successfully created ❮ ZI ❯ Bin directory"
   fi
 }
+CREATE_ZSHRC() {
+  if [[ -f "$ZSHRC_FILE" ]]; then
+    MSG_INFO "File .zshrc already exists, please select an option:"
+    MSG_NOTE "Press [y] to overwrite, [n] to exit, default is [n]"
+    if CONTINUE; then
+      rm -rf "$ZI_ZSHRC"
+    else
+      CLEANUP
+      exit 0
+    fi
+  fi
+  $DOWNLOAD "$ZI_ZSHRC_URL" "$ZI_ZSHRC"
+  cat "$ZI_ZSHRC" >"$ZSHRC_FILE"
+}
+
 DO_INSTALL() {
   if [[ -d "${ZI_HOME}/${ZI_BIN_DIR}/.git" ]]; then
     builtin cd "${ZI_HOME}/${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory to ${ZI_HOME}/${ZI_BIN_DIR}"
@@ -82,15 +99,14 @@ DO_INSTALL() {
     git clean -d -f -f && MSG_INFO "Cleaned up the repository"
     git reset -q --hard HEAD && MSG_INFO "Re-initializing the index and working tree"
     MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
-  fi
-  if [[ ! -f "$ZI_SOURCE" ]]; then
+  else
+    SET_DIR
     builtin cd "$ZI_HOME" || ERROR "Something went wrong while changing directory"
     MSG_NOTE "Installing the (\033[34;01m…Z-Shell…\033[36;01m …❮ ZI ❯…)\033[0m"
     MSG_NOTE "Interactive feature-rich plugin manager for (\033[34;01m…ZSH…\033[36;01m)\033[0m"
     ##{ command git clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { $PROGRESS_BAR || cat; }; } 2>/dev/null
     command git clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}"
     if [[ -f "$ZI_SOURCE" ]]; then
-      builtin cd "${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory"
       MSG_OK "❮ ZI ❯ Installed successfully"
       MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
     else
@@ -98,11 +114,11 @@ DO_INSTALL() {
       ERROR "Please report issue to https://github.com/z-shell/zi/issues/new"
     fi
   fi
+  CREATE_ZSHRC
 }
 MAIN() {
   PRE_CHECKS
   GET_SOURCE && SET_COLORS
-  SET_DIR
   DO_INSTALL
   MSG_INFO "For additional support please visit:"
   MSG_INFO "Discussions:  https://github.com/z-shell/zi/discussions"

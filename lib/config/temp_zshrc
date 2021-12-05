@@ -3,9 +3,9 @@
 [[ -z "$ZI_BIN_DIR" ]]  && ZI_BIN_DIR="${ZI_BIN_DIR:-bin}"
 [[ -z "$ZI_SOURCE" ]]   && ZI_SOURCE="${ZI_SOURCE:-${ZI_HOME}/${ZI_BIN_DIR}/zi.zsh}"
 if [[ ! -f "$ZI_SOURCE" ]]; then
-print -P "%F{33}▓▒░ %F{160}Installing (%F{33}Z-Shell/ZI%F{160})%f%b"
-print -P "%F{33}▓▒░ %F{160}Interactive plugin manager for %F{33}…ZSH…%F{160}%f%b"
-mkdir -p "$ZI_HOME" && chmod g-rwX "$ZI_HOME" && git clone -q https://github.com/z-shell/zi.git "${ZI_HOME}/${ZI_BIN_DIR}"
+  print -P "%F{33}▓▒░ %F{160}Installing (%F{33}Z-Shell/ZI%F{160})%f%b"
+  print -P "%F{33}▓▒░ %F{160}Interactive plugin manager for %F{33}…ZSH…%F{160}%f%b"
+  mkdir -p "$ZI_HOME" && chmod g-rwX "$ZI_HOME" && git clone -q https://github.com/z-shell/zi.git "${ZI_HOME}/${ZI_BIN_DIR}"
 [[ -f "$ZI_SOURCE" ]] && print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
   print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
@@ -13,4 +13,4 @@ source "$ZI_SOURCE"
 autoload -Uz _zi && (( ${+_comps} )) && _comps[zi]=_zi
 # Z-Shell ZI Annexes
 zi light-mode for \
-z-shell/z-a-meta-plugins annexes
+  z-shell/z-a-meta-plugins annexes

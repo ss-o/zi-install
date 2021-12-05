@@ -18,7 +18,7 @@ ZI_ZSHRC="${WORKDIR}/temp_zshrc"
 [[ -z "$ZI_HOME" ]] && ZI_HOME="${ZI_HOME:-${ZDOTDIR:-$HOME}/.zi}"
 [[ -z "$ZI_BIN_DIR" ]] && ZI_BIN_DIR="${ZI_BIN_DIR:-bin}"
 [[ -z "$ZI_SOURCE" ]] && ZI_SOURCE="${ZI_SOURCE:-${ZI_HOME}/${ZI_BIN_DIR}/zi.zsh}"
-[[ -z "$ZSHRC_FILE" ]] && ZSHRC_FILE="${ZSHRC_FILE:-ZDOTDIR:-$HOME}/.zshrc}}"
+[[ -z "$ZSHRC_FILE" ]] && ZSHRC_FILE="${ZSHRC_FILE:-${ZDOTDIR:-$HOME}/.zshrc}"
 
 WGET() { wget "$1" --quiet --show-progress; }
 CURL() { curl -fSL --progress-bar "$1" -o "$2"; }
@@ -79,7 +79,7 @@ SET_DIR() {
 CREATE_ZSHRC() {
   if [[ -f "$ZSHRC_FILE" ]]; then
     MSG_INFO "File .zshrc already exists, please select an option:"
-    MSG_NOTE "Press [y] to overwrite, [n] to exit, default is [n]"
+    MSG_NOTE "Press [y] to overwrite, [n] to exit, default is [n]:"
     if CONTINUE; then
       rm -rf "$ZI_ZSHRC"
     else
@@ -92,13 +92,14 @@ CREATE_ZSHRC() {
 }
 
 DO_INSTALL() {
+  CREATE_ZSHRC
   if [[ -d "${ZI_HOME}/${ZI_BIN_DIR}/.git" ]]; then
     builtin cd "${ZI_HOME}/${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory to ${ZI_HOME}/${ZI_BIN_DIR}"
     MSG_NOTE "We found ❮ ZI ❯ directory. Updating..."
     MSG_INFO "Re-initializing Z-Shell ❮ ZI ❯ at ${ZI_HOME}/${ZI_BIN_DIR}"
-    git clean -d -f -f && MSG_INFO "Cleaned up the repository"
-    git reset -q --hard HEAD && MSG_INFO "Re-initializing the index and working tree"
-    MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
+    git clean -d -f -f && git reset -q --hard HEAD
+    clear
+    TITLE "Update successfully completed ❮ ZI ❯ Version: $(GIT_V)"
   else
     SET_DIR
     builtin cd "$ZI_HOME" || ERROR "Something went wrong while changing directory"
@@ -107,22 +108,21 @@ DO_INSTALL() {
     ##{ command git clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { $PROGRESS_BAR || cat; }; } 2>/dev/null
     command git clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}"
     if [[ -f "$ZI_SOURCE" ]]; then
-      MSG_OK "❮ ZI ❯ Installed successfully"
-      MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
+      clear
+      TITLE "❮ ZI ❯ Install successfully completed ❮ ZI ❯ Version: $(GIT_V)"
     else
       MSG_ERR "The clone has failed."
       ERROR "Please report issue to https://github.com/z-shell/zi/issues/new"
     fi
   fi
-  CREATE_ZSHRC
 }
 MAIN() {
   PRE_CHECKS
   GET_SOURCE && SET_COLORS
   DO_INSTALL
-  MSG_INFO "For additional support please visit:"
-  MSG_INFO "Discussions:  https://github.com/z-shell/zi/discussions"
-  MSG_INFO "Issues: https://github.com/z-shell/zi/issues/new"
+  MSG_INFO "For additional questions or support please visit:      "
+  MSG_NOTE "Discussions:  https://github.com/z-shell/zi/discussions"
+  MSG_NOTE "Issues:       https://github.com/z-shell/zi/issues/new "
   CLEANUP
   exit 0
 }

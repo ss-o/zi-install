@@ -71,8 +71,8 @@ SHOW_MENU() {
     echo -ne "
 $TPGREEN❮ ZI ❯ Source$TPRESET
 $TPDIM# ---============================================--- # $TPRESET
-  $(CECHO '-green' '1)') Install/Update ❮ ZI ❯
-  $(CECHO '-green' '2)') Create .zshrc
+  $(CECHO '-green' '1)') Install/Update + (simple .zshrc)
+  $(CECHO '-green' '2)') Create .zshrc & reload shell to install
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
 $TPDIM# ---===========================================--- # $TPRESET

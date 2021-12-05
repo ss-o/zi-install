@@ -131,7 +131,7 @@ DO_OPTIONS() {
     SHOW_MENU "${@}"
   done
   while [ $# -gt 0 ]; do
-    case $1 in
+    case "$1" in
     -i | --install)
       GET_OPTION="1"
       DO_SELECTION

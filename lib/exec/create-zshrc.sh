@@ -17,6 +17,7 @@ ZI_ZSTYLE_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/
 ZI_ANNEX_META_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/annex-meta-plugins"
 ZI_OMZ_LIB_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omz-lib"
 ZI_OMZ_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omz-plugins"
+ZI_OMZ_THEME_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omzt-robbyrussell"
 ZI_REC_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rec-plugins"
 
 ZI_P10K_HEAD="${WORKDIR}/p10k-head"
@@ -27,6 +28,7 @@ ZI_ZSTYLE="${WORKDIR}/zstyle"
 ZI_ANNEX_META="${WORKDIR}/annex-meta-plugins"
 ZI_OMZ_LIB="${WORKDIR}/omz-lib"
 ZI_OMZ_PLUG="${WORKDIR}/omz-plugins"
+ZI_OMZ_THEME="${WORKDIR}/omzt-robbyrussell"
 ZI_REC_PLUG="${WORKDIR}/rec-plugins"
 
 # Message functions to print messages to the user.
@@ -203,6 +205,9 @@ CREATE_ZSHRC() {
   fi
   if [[ -f "$ZI_P10K_PROMT" ]]; then
     cat "$ZI_P10K_PROMT" >>"${HOME}/.zshrc"
+  else
+    $DOWNLOAD "$ZI_OMZ_THEME_URL" "$ZI_OMZ_THEME"
+    cat "$ZI_OMZ_THEME" >>"${HOME}/.zshrc"
   fi
 }
 

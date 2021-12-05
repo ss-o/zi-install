@@ -1,20 +1,13 @@
-# ZI Auto setup and load
+# ZI auto-setup
 [[ -z "$ZI_HOME" ]]     && ZI_HOME="${ZI_HOME:-${ZDOTDIR:-$HOME}/.zi}"
 [[ -z "$ZI_BIN_DIR" ]]  && ZI_BIN_DIR="${ZI_BIN_DIR:-bin}"
 [[ -z "$ZI_SOURCE" ]]   && ZI_SOURCE="${ZI_SOURCE:-${ZI_HOME}/${ZI_BIN_DIR}/zi.zsh}"
-# ZI Install
 if [[ ! -f "$ZI_SOURCE" ]]; then
 print -P "%F{33}▓▒░ %F{160}Installing (%F{33}Z-Shell/ZI%F{160})%f%b"
 print -P "%F{33}▓▒░ %F{160}Interactive plugin manager for %F{33}…ZSH…%F{160}%f%b"
-    command mkdir -p "$ZI_HOME" && command chmod g-rwX "$ZI_HOME"
-    command git clone -q https://github.com/z-shell/zi.git "${ZI_HOME}/${ZI_BIN_DIR}"
-    if [[ -f "$ZI_SOURCE" ]]; then
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b"
-    else
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-    fi
+mkdir -p "$ZI_HOME" && chmod g-rwX "$ZI_HOME" && git clone -q https://github.com/z-shell/zi.git "${ZI_HOME}/${ZI_BIN_DIR}"
+[[ -f "$ZI_SOURCE" ]] && print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+  print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
-# ZI load
 source "$ZI_SOURCE"
-autoload -Uz _zi
-(( ${+_comps} )) && _comps[zi]=_zi
+autoload -Uz _zi && (( ${+_comps} )) && _comps[zi]=_zi

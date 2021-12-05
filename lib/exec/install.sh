@@ -104,8 +104,10 @@ MAIN() {
   GET_SOURCE && SET_COLORS
   SET_DIR
   DO_INSTALL
+  MSG_INFO "For additional support please visit:"
+  MSG_INFO "Discussions:  https://github.com/z-shell/zi/discussions"
+  MSG_INFO "Issues: https://github.com/z-shell/zi/issues/new"
   CLEANUP
-  return 0
+  exit 0
 }
-
 MAIN "${@}" || return 1

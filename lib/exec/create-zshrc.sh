@@ -170,7 +170,7 @@ DO_SELECTION() {
 CREATE_ZSHRC() {
   if [[ -f "$ZI_ZSHRC" ]]; then
     MSG_INFO "File .zshrc already exists"
-    MSG_NOTE "Press [y] to overwrite, [n] to exit, default is [n]"
+    echo -e "Press [y] to overwrite, [n] to exit, default is [n]"
     if CONTINUE; then
       rm -rf "$ZI_ZSHRC"
     else

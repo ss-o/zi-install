@@ -119,7 +119,7 @@ DO_SELECTION() {
   shift
 }
 DO_OPTIONS() {
-  if HAS_TERMINAL; then
+  if ! HAS_TERMINAL; then
     TERM="xterm-256color"
   fi
   if ! IS_TTY; then

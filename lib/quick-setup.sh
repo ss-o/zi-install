@@ -150,6 +150,8 @@ MAIN() {
   # shellcheck disable=SC1090
   GET_SOURCE && SET_COLORS
   DO_OPTIONS "${@}"
+  CLEANUP
+  exit 0
 }
 while true; do
   MAIN "${@}"

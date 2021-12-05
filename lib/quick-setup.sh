@@ -16,9 +16,6 @@ WGET() { wget "$1" --quiet --show-progress; }
 CURL() { curl -fSL --progress-bar "$1" -o "$2"; }
 CMD() { command -v "$1" >/dev/null 2>&1; }
 EXEC() { type -fP "$1" >/dev/null 2>&1; }
-GIT_E() { command git -C "${ZI_HOME}/${ZI_BIN_DIR}" "$@"; }
-GIT_V() { GIT_E describe --tags 2>/dev/null; }
-GIT_O() { GIT_E config -l | grep remote.origin.url | awk -F'=' '{print $2}'; }
 HAS_TERMINAL() { [ -t 0 ]; }
 IS_TTY() { HAS_TERMINAL; }
 IS_PIPED() { ! [ -t 1 ]; }

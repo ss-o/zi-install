@@ -79,7 +79,7 @@ $TPDIM# ---============================================--- # $TPRESET
   $(CECHO '-green' '5)') Annexes + meta plugins
   $(CECHO '-green' '6)') Recommended plugins
   $(CECHO '-green' '7)') Powerlevel10k theme
-  $(CECHO '-yellow' 'c)') Create .zshrc
+  $(CECHO '-yellow' 'c)') Continue to create .zshrc
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
 $TPDIM# ---===========================================--- # $TPRESET
@@ -144,16 +144,24 @@ DO_SELECTION() {
     ;;
   c | C)
     clear
-    NOTIFY "CHOICE 10"
+    NOTIFY "Creatting .zshrc"
+    sleep 1
     CREATE_ZSHRC
+    MSG_OK "Created .zshrc"
+    sleep 1
+    MSG_NOTE "Review/edit your .zshrc file"
     sleep 2
+    MSG_NOTE "Reload your shell for changes to take effect"
+    sleep 2
+    CLEANUP
+    exit 0
     ;;
   q | Q)
     clear
     MSG_NOTE "For any questions, your are welcome to discuss them on:"
     MSG_INFO "❮ ZI ❯ GitHub https://github.com/z-shell/zi/discussions"
     CLEANUP
-    return 0
+    FINISHED "Session finished successfully"
     ;;
   *)
     clear && MSG_NOTE "Invalid option, please try again"

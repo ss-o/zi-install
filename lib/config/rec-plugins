@@ -1,0 +1,4 @@
+# Recommended plugins in turbo mode
+zt '0c' light-mode for \
+zpm-zsh/ls \
+MichaelAquilina/zsh-you-should-use

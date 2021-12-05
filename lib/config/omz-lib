@@ -1,8 +1,9 @@
-# Oh-My-Zsh Library
+# Setopt required for oh-my-zsh to work
 setopt prompt_subst
 setopt promptsubst
 
-zi light-mode for \
+# Recommended oh-my-zsh library in turbo mode
+zt '0a' light-mode for \
   OMZL::git.zsh atload"unalias grv g" OMZP::git \
   atinit"HIST_STAMPS=dd.mm.yyyy" OMZL::history.zsh \
   OMZL::compfix.zsh OMZL::clipboard.zsh OMZL::functions.zsh \

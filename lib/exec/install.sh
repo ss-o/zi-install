@@ -7,7 +7,7 @@ ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
 PBAR_URL="https://raw.githubusercontent.com/z-shell/zi/main/lib/zsh/git-process-output.zsh"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
 PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
-ZI_INIT="${WORKDIR}/zi-init.zsh"
+ZI_INIT="${WORKDIR}/script-init.zsh"
 
 # Hardcoding is something that should be avoided as much as possible.
 # If you hardcode something on your code it will completely "destroy" the portability of your code in a great extent.
@@ -54,6 +54,7 @@ PRE_CHECKS() {
 GET_SOURCE() {
   if [[ ! -f "$ZI_INIT" ]]; then
     $DOWNLOAD "$ZI_INIT_URL" "$ZI_INIT" && command chmod g-rwX "$ZI_INIT"
+
   else
     echo -e "Unable to download zi-init.zsh, please check your internet connection."
   fi
@@ -63,6 +64,8 @@ GET_SOURCE() {
     echo -e "Unable to download the progress bar"
     exit 1
   fi
+  # shellcheck disable=SC1090
+  source "$ZI_INIT"
 }
 
 SET_DIR() {
@@ -106,14 +109,11 @@ DO_INSTALL() {
 }
 MAIN() {
   PRE_CHECKS
-  GET_SOURCE
-  # shellcheck disable=SC1090
-  source "$ZI_INIT" && SET_COLORS
+  GET_SOURCE && SET_COLORS
   SET_DIR
   DO_INSTALL
   CLEANUP
-  exit 0
+  return 0
 }
-while true; do
-  MAIN "${@}" || exit 1
-done
+
+MAIN "${@}" || return 1

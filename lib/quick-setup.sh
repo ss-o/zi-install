@@ -1,232 +1,63 @@
 #!/usr/bin/env bash
-trap '' SIGINT SIGQUIT SIGTERM
+
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
-: TERM="xterm-256color"
-: GITOPT="-q"
-: GITSUB="--quiet"
-: GITSUBOPT="--quiet"
-: NO_TTY="${NO_TTY:-no}"
-: PIPED="${PIPED:-no}"
-: SRC_INSTALL_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/exec/install.sh"
-: SRC_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-: SRC_INSTALL="${WORKDIR}/install.sh"
-: SRC_INIT="${WORKDIR}/script-init.sh"
-# shellcheck disable=SC2034
-REPO_TAG="$(git describe --tags)"
-SET_PATHS() {
-  while [ -h "$SOURCE" ]; do
-    ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
-  done
-  ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
-}
-SET_WORKDIR() {
-  WORKDIR="(mktemp -d -t zi-workdir.XXXXXXXXXX)"
-  if test "$WORKDIR"; then
-    WORKDIR="(mktemp -d -t zi-workdir.XXXXXXXXXX)"
-  else
-    WORKDIR="(mktemp -d)"
-    if test -d "$WORKDIR"; then
-      WORKDIR="(mktemp -d)"
-    else
-      WORKDIR="/tmp/zi-workdir$$"
-      if test -d "$WORKDIR"; then
-        WORKDIR="/tmp/zi-workdir$$"
-      else
-        if command -v mkdir -p "$(PWD)/temp" >/dev/null 2>&1; then
-          WORKDIR="$(PWD)/temp"
-          mkdir -p "$WORKDIR"
-        else
-          echo -e "Unable to create safe work environment to proceed."
-          echo -e "For assistance, please open new issue at https://github.com/zi-source/issues/new"
-          exit 1
-        fi
-      fi
-    fi
-  fi
-}
-# Function enables colors for interactive shells.
-SET_COLORS() {
-  TPRESET=""
-  TPRED=""
-  TPGREEN=""
-  TPYELLOW=""
-  TPBLUE=""
-  TPMAGENTA=""
-  TPCYAN=""
-  TPWHITE=""
-  TPBGRED=""
-  TPBGGREEN=""
-  TPBOLD=""
-  TPDIM=""
-  test -t 2 || return 1
-  if command -v tput >/dev/null 2>&1; then
-    if [ $(($(tput colors 2>/dev/null))) -ge 8 ]; then
-      TPRESET="$(tput sgr 0)"
-      TPRED="$(tput setaf 1)"
-      TPGREEN="$(tput setaf 2)"
-      TPYELLOW="$(tput setaf 3)"
-      TPBLUE="$(tput setaf 4)"
-      TPMAGENTA="$(tput setaf 5)"
-      TPCYAN="$(tput setaf 6)"
-      TPWHITE="$(tput setaf 7)"
-      TPBGRED="$(tput setab 1)"
-      TPBGGREEN="$(tput setab 2)"
-      TPBOLD="$(tput bold)"
-      TPDIM="$(tput dim)"
-    fi
-  fi
-  return 0
-}
-TITLE() {
-  printf "\033[30;46m"
-  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
-  printf '%-*s\n' "${COLUMNS:-$(tput cols)}" "  # $1" | tr ' ' ' '
-  printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
-  printf "\e[0m"
-  printf "\n"
-}
-NOTIFY() {
-  printf "\033[30;42m"
-  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
-  printf '%-*s\n' "${COLUMNS:-$(tput cols)}" "  # $1" | tr ' ' ' '
-  printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
-  printf "\e[0m"
-  printf "\n"
-}
-# Aditional echo colors
-CECHO() {
-  while [[ "$1" ]]; do
-    case "$1" in
-    -norm) color="\033[00m" ;;
-    -black) color="\033[30;01m" ;;
-    -red) color="\033[31;01m" ;;
-    -green) color="\033[32;01m" ;;
-    -yellow) color="\033[33;01m" ;;
-    -blue) color="\033[34;01m" ;;
-    -magenta) color="\033[35;01m" ;;
-    -cyan) color="\033[36;01m" ;;
-    -white) color="\033[37;01m" ;;
-    -line)
-      one_line=1
-      shift
-      continue
-      ;;
-    *)
-      echo -n "$1"
-      shift
-      continue
-      ;;
-    esac
 
-    shift
-    echo -en "$color"
-    echo -en "$1"
-    echo -en "\033[00m"
-    shift
+TERM="xterm-256color"
+NO_TTY="${NO_TTY:-no}"
+PIPED="${PIPED:-no}"
+WORKDIR="$(mktemp -d)"
+ZI_INSTALL_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/exec/install.sh"
+ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
+ZI_INSTALL="${WORKDIR}/install.sh"
+ZI_INIT="${WORKDIR}/script-init.sh"
 
-  done
-  if [[ ! $one_line ]]; then
-    echo
-  fi
-}
 # Message functions to print messages to the user.
-HAS_TERMINAL() { [ -t 0 ]; }
-IS_TTY() { HAS_TERMINAL; }
-IS_PIPED() { ! [ -t 1 ]; }
-MSG_OK() { echo -e "\e[0m[ ${TPGREEN}✔\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPGREEN}${*}\e[0m ]"; }
-MSG_ERR() { echo -e "\e[0m[ ${TPRED}✖\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPRED}${*}\e[0m ]"; }
-MSG_INFO() { echo -e "\e[0m[ ${TPBOLD}${TPYELLOW}➜\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPYELLOW}${*}\e[0m ]"; }
-MSG_NOTE() { echo -e "\e[0m[ ${TPBOLD}${TPCYAN}߹\e[0m ]${TPBOLD} ➜➜➜ \e[0m[ ${TPBOLD}${TPCYAN}${*}\e[0m ]"; }
-CLEANUP() { [[ -d "$WORKDIR" ]] && rm -rvf "$WORKDIR"; }
-# Prints error message and exits with error code 1.
-ERROR() {
-  MSG_ERR "$@" >&2
-  CLEANUP
-  exit 1
-}
-# Prints success message and exits with error code 0.
-FINISHED() {
-  MSG_OK "$@"
-  exit 0
-}
-# Functions to reduce the amount of code in the scripts.
 WGET() { wget "$1" --quiet --show-progress; }
 CURL() { curl -fSL --progress-bar "$1" -o "$2"; }
 CMD() { command -v "$1" >/dev/null 2>&1; }
 EXEC() { type -fP "$1" >/dev/null 2>&1; }
-MAKE_DIR() { [[ ! -d "$1" ]] && mkdir -p "$1"; }
-CONTINUE() {
-  read -r -p "$1* [y/N]" response
-  case $response in
-  [yY][eE][sS] | [yY])
-    true
-    ;;
-  *)
-    false
-    ;;
-  esac
-}
-NO_ROOT() {
-  if [[ $USER == "root" ]]; then
-    ERROR "Do not run as root, no privileges required."
+GIT_E() { command git -C "${ZI_HOME}/${ZI_BIN_DIR}" "$@"; }
+GIT_V() { GIT_E describe --tags 2>/dev/null; }
+GIT_O() { GIT_E config -l | grep remote.origin.url | awk -F'=' '{print $2}'; }
+HAS_TERMINAL() { [ -t 0 ]; }
+IS_TTY() { HAS_TERMINAL; }
+IS_PIPED() { ! [ -t 1 ]; }
+PRE_CHECKS() {
+  if CMD zsh; then
+    echo -e "$(zsh --version) found on the system, proceeding..."
+    sleep 1
+  else
+    echo -e "Zsh not found on the system, please install it before proceeding..."
+    exit 1
+  fi
+  if CMD git; then
+    echo -e "Git is installed, proceeding..."
+    sleep 1
+  else
+    echo -e "Git is not installed, please install it first."
+    exit 1
+  fi
+  if CMD curl; then
+    DOWNLOAD="CURL"
+    echo -e "Curl is set as downloader, proceeding..."
+  elif CMD wget; then
+    DOWNLOAD="WGET"
+    echo -e "Wget is set as downloader, proceeding..."
+  else
+    echo "Neither curl nor wget are installed, please install one of them before proceeding."
+    exit 1
   fi
 }
-SYMLINK() {
-  local src="$1" dst="$2"
-  local overwrite='' backup='' skip=''
-  local action=''
-  #shellcheck disable=SC2166
-  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]; then
-    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
-      currentSrc="$(readlink "$dst")"
-      if [ "$currentSrc" == "$src" ]; then
-        skip=true
-      else
-        "File $dst ($(basename "$src")) already exists, what do you want to do?"
-        "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -n 1 action
-        case "$action" in
-        o)
-          overwrite=true
-          ;;
-        O)
-          overwrite_all=true
-          ;;
-        b)
-          backup=true
-          ;;
-        B)
-          backup_all=true
-          ;;
-        s)
-          skip=true
-          ;;
-        S)
-          skip_all=true
-          ;;
-        *) ;;
-        esac
-      fi
-    fi
-    overwrite=${overwrite:-$overwrite_all}
-    backup=${backup:-$backup_all}
-    skip=${skip:-$skip_all}
-    if [ "$overwrite" == "true" ]; then
-      rm -rf "$dst" && MSG_INFO "Removed $dst"
-    fi
-    if [ "$backup" == "true" ]; then
-      mv "$dst" "${dst}.backup" && MSG_INFO "Backup made - ${dst}.backup"
-    fi
-    if [ "$skip" == "true" ]; then
-      MSG_INFO "Skipped $src"
-    fi
+GET_SOURCE() {
+  if [[ ! -f "$ZI_INIT" ]]; then
+    $DOWNLOAD "$ZI_INIT_URL" "$ZI_INIT" && command chmod g-rwX "$ZI_INIT"
+  else
+    echo -e "Unable to download zi-init.zsh, please check your internet connection."
   fi
-  if [ "$skip" != "true" ]; then
-    ln -fs "$1" "$2" && MSG_OK "Linked $1 to $2"
-  fi
+  # shellcheck disable=SC1090
+  source "$ZI_INIT"
 }
+
 START_WORK_SESSION() {
   NO_ROOT
   SET_WORKDIR
@@ -245,16 +76,15 @@ START_WORK_SESSION() {
 SHOW_MENU() {
   while true; do
     clear
-    SET_COLORS
     echo -ne "
-$TPGREEN ❮ ZI ❯ Source$TPRESET v$REPO_TAG
-$TPDIM # ---============================================--- # $TPRESET
-$(CECHO '-green' '1)') Just install ❮ ZI ❯
-$(CECHO '-green' '2)') Build ZSHRC
-$(CECHO '-green' '3)') Run install + ZSHRC
-$(CECHO '-line')
-$(CECHO '-red' 'q)') Exit
-$TPDIM # ---===========================================--- # $TPRESET
+$TPGREEN❮ ZI ❯ Source$TPRESET
+$TPDIM# ---============================================--- # $TPRESET
+  $(CECHO '-green' '1)') Install ❮ ZI ❯
+  $(CECHO '-green' '2)') Build ZSHRC
+  $(CECHO '-green' '3)') Run install + ZSHRC
+  $(CECHO '-line')
+  $(CECHO '-red' 'q)') Exit
+$TPDIM# ---===========================================--- # $TPRESET
 "
     read -rp "$TPCYAN Please select an option:$TPRESET " GET_OPTION
     if { [[ "${GET_OPTION}" =~ ^[A-Za-z0-9]+$ ]] || [[ "${GET_OPTION}" -gt 0 ]]; }; then
@@ -269,14 +99,8 @@ DO_SELECTION() {
     clear
     MSG_OK "Installing ❮ ZI ❯"
     sleep 2
-    SET_PATHS
-    if [ -f "${ABSOLUTE_PATH}/exec/install.sh" ]; then
-      bash "${ABSOLUTE_PATH}/exec/install.sh"
-      exit 0
-    else
-      curl -fsSF https://git.io/zi-install -o "${WORKDIR}/install.sh"
-      exit 0
-    fi
+    $DOWNLOAD "$ZI_INSTALL_URL" "$ZI_INSTALL" && command chmod g-rwX "$ZI_INSTALL"
+    builtin source "$ZI_INSTALL"
     ;;
   2)
     clear
@@ -291,6 +115,7 @@ DO_SELECTION() {
     clear
     MSG_NOTE "For any questions, your are welcome to discuss them on:"
     MSG_INFO "❮ ZI ❯ GitHub https://github.com/z-shell/zi/discussions"
+    CLEANUP
     FINISHED "Session finished successfully"
     ;;
   *)
@@ -325,10 +150,11 @@ DO_OPTIONS() {
   done
 }
 MAIN() {
+  PRE_CHECKS
+  # shellcheck disable=SC1090
+  GET_SOURCE && SET_COLORS
   DO_OPTIONS "${@}"
-  FINISHED "Session finished successfully"
 }
-
 while true; do
   MAIN "${@}"
 done

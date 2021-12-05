@@ -6,11 +6,7 @@ TERM="xterm-256color"
 NO_TTY="${NO_TTY:-no}"
 PIPED="${PIPED:-no}"
 WORKDIR="$(mktemp -d)"
-ZI_CREATE_RC_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/exec/create-zshrc.sh"
-ZI_INSTALL_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/exec/install.sh"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-ZI_CREATE_RC="${WORKDIR}/create-zshrc.sh"
-ZI_INSTALL="${WORKDIR}/install.sh"
 ZI_INIT="${WORKDIR}/script-init.sh"
 
 # Message functions to print messages to the user.
@@ -50,30 +46,14 @@ GET_SOURCE() {
   # shellcheck disable=SC1090
   source "$ZI_INIT"
 }
-
-START_WORK_SESSION() {
-  NO_ROOT
-  SET_WORKDIR
-  if [ ! -e "${WORKDIR}" ]; then
-    trap 'CLEANUP' INT TERM EXIT
-    touch "${WORKDIR}/session.log"
-    SHOW_MENU
-    CLEANUP
-    trap - INT TERM EXIT
-    return 0
-  else
-    ERORR "Failed to start session"
-  fi
-}
-
 SHOW_MENU() {
   while true; do
     clear
     echo -ne "
 $TPGREEN❮ ZI ❯ Source$TPRESET
 $TPDIM# ---============================================--- # $TPRESET
-  $(CECHO '-green' '1)') Install ❮ ZI ❯
-  $(CECHO '-green' '2)') Create .zshrc
+  $(CECHO '-green' '1)') Add setopt's to zshrc
+  $(CECHO '-green' '2)') Add zstyle .zshrc
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
 $TPDIM# ---===========================================--- # $TPRESET
@@ -84,20 +64,20 @@ $TPDIM# ---===========================================--- # $TPRESET
     fi
   done
 }
-
 DO_SELECTION() {
   case "${GET_OPTION}" in
   1)
     clear
-    NOTIFY "Installing ❮ ZI ❯"
-    sleep 2
-    $DOWNLOAD "$ZI_INSTALL_URL" "$ZI_INSTALL" && command chmod g-rwX "$ZI_INSTALL"
-    builtin source "$ZI_INSTALL"
+    NOTIFY "CHOICE 1"
+    ADD_OPTION_1=yes
+    DO_TEMPLATE
     sleep 2
     ;;
   2)
     clear
     NOTIFY "CHOICE 2"
+    ADD_OPTION_2=yes
+    DO_TEMPLATE
     sleep 2
     ;;
   q | Q)
@@ -116,6 +96,15 @@ DO_SELECTION() {
   esac
   shift
 }
+DO_TEMPLATE() {
+  if [[ $ADD_OPTION_1 = yes ]]; then
+    $DOWNLOAD
+  fi
+  if [[ $ADD_OPTION_2 = yes ]]; then
+    $DOWNLOAD
+  fi
+}
+
 DO_OPTIONS() {
   if HAS_TERMINAL; then
     export TERM
@@ -147,7 +136,8 @@ MAIN() {
   # shellcheck disable=SC1090
   GET_SOURCE && SET_COLORS
   DO_OPTIONS "${@}"
+  CLEANUP
+  return 0
 }
-while true; do
-  MAIN "${@}"
-done
+
+MAIN "${@}" || return 1

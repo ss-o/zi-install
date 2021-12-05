@@ -26,17 +26,11 @@ GIT_E() { command git -C "${ZI_HOME}/${ZI_BIN_DIR}" "$@"; }
 GIT_V() { GIT_E describe --tags 2>/dev/null; }
 GIT_O() { GIT_E config -l | grep remote.origin.url | awk -F'=' '{print $2}'; }
 PRE_CHECKS() {
-  if CMD zsh; then
-    echo -e "$(zsh --version) found on the system, proceeding..."
-    sleep 1
-  else
+  if ! CMD zsh; then
     echo -e "Zsh not found on the system, please install it before proceeding..."
     exit 1
   fi
-  if CMD git; then
-    echo -e "Git is installed, proceeding..."
-    sleep 1
-  else
+  if ! CMD git; then
     echo -e "Git is not installed, please install it first."
     exit 1
   fi
@@ -54,9 +48,9 @@ PRE_CHECKS() {
 GET_SOURCE() {
   if [[ ! -f "$ZI_INIT" ]]; then
     $DOWNLOAD "$ZI_INIT_URL" "$ZI_INIT" && command chmod g-rwX "$ZI_INIT"
-
   else
     echo -e "Unable to download zi-init.zsh, please check your internet connection."
+    exit 1
   fi
   if [[ ! -f "$PROGRESS_BAR" ]]; then
     $DOWNLOAD "$PBAR_URL" "$PROGRESS_BAR" && command chmod g-rwX "$PROGRESS_BAR"

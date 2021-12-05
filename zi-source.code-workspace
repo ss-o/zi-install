@@ -5,20 +5,48 @@
 		}
 	],
 	"settings": {
+		"files.associations": {
+			"*.zi": "zsh",
+			"z-a*": "zsh"
+		},
+		"bookmarks.saveBookmarksInProject": true,
+		"bookmarks.useWorkaroundForFormatters": true,
+		"conventionalCommits.emojiFormat": "emoji",
+		"todo-tree.general.statusBar": "current file",
+		"todo-tree.general.tags": [
+			"BUG",
+			"HACK",
+			"FIXME",
+			"TODO"
+		],
+		"terminal.enableAppInsights": false,
+		"shellformat.useEditorConfig": true,
+		"projectManager.filterOnFullPath": true,
+		"git.autofetch": true,
+		"git.enableCommitSigning": true,
+		"git.followTagsWhenSync": true,
+		"git.fetchOnPull": true,
+		"git.rebaseWhenSync": true,
+		"git.enableSmartCommit": true,
+		"git.postCommitCommand": "sync",
+		"markdown.extension.tableFormatter.normalizeIndentation": true,
+		"editor.formatOnSaveMode": "modifications",
 		"editor.tabSize": 2,
 		"files.insertFinalNewline": true,
 		"files.trimFinalNewlines": true,
 		"files.trimTrailingWhitespace": true,
-		"todo-tree.general.statusBar": "current file",
-		"git.enableCommitSigning": true,
-		"git.fetchOnPull": true,
-		"git.followTagsWhenSync": true,
-		"git.rebaseWhenSync": true,
-		"bookmarks.saveBookmarksInProject": true
+		"editor.detectIndentation": false,
+		"workbench.tree.indent": 16
 	},
 	"extensions": {
 		"recommendations": [
-			"coenraads.bracket-pair-colorizer"
+			"alefragnani.project-manager",
+			"gruntfuggly.todo-tree",
+			"alefragnani.bookmarks",
+			"aaron-bond.better-comments",
+			"editorconfig.editorconfig",
+			"tombonnike.vscode-status-bar-format-toggle",
+			"oderwat.indent-rainbow"
 		]
 	}
 }

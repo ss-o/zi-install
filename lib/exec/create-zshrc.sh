@@ -96,37 +96,37 @@ DO_SELECTION() {
     clear
     $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
     NOTIFY "Added setopt"
-    sleep 3
+    sleep 2
     ;;
   2)
     clear
     $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
     NOTIFY "Added zstyle"
-    sleep 3
+    sleep 2
     ;;
   3)
     clear
     $DOWNLOAD "$ZI_OMZ_LIB_URL" "$ZI_OMZ_LIB"
     NOTIFY "Added oh-my-zsh library"
-    sleep 3
+    sleep 2
     ;;
   4)
     clear
     $DOWNLOAD "$ZI_OMZ_PLUG_URL" "$ZI_OMZ_PLUG"
     NOTIFY "Added oh-my-zsh plugins"
-    sleep 3
+    sleep 2
     ;;
   5)
     clear
     $DOWNLOAD "$ZI_ANNEX_META_URL" "$ZI_ANNEX_META"
     NOTIFY "Added annexes + meta plugins"
-    sleep 3
+    sleep 2
     ;;
   6)
     clear
     $DOWNLOAD "$ZI_REC_PLUG_URL" "$ZI_REC_PLUG"
     NOTIFY "Added recommended plugins"
-    sleep 3
+    sleep 2
     ;;
   7)
     clear
@@ -167,7 +167,8 @@ DO_SELECTION() {
 }
 CREATE_ZSHRC() {
   if [[ -f "$ZI_ZSHRC" ]]; then
-    MSG_INFO "File .zshrc already exists, overwrite or exit?"
+    MSG_INFO "File .zshrc already exists"
+    MSG_NOTE "Press [y] to overwrite, [n] to exit, default is [n]"
     if CONTINUE; then
       rm -rf "$ZI_ZSHRC"
     else

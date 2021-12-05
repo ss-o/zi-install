@@ -27,7 +27,7 @@ ZI_ZSTYLE="${WORKDIR}/zstyle"
 ZI_ANNEX_META="${WORKDIR}/annex-meta-plugins"
 ZI_OMZ_LIB="${WORKDIR}/omz-lib"
 ZI_OMZ_PLUG="${WORKDIR}/omz-plugins"
-ZI_REC_PLUG_URL="${WORKDIR}/rec-plugins"
+ZI_REC_PLUG="${WORKDIR}/rec-plugins"
 
 # Message functions to print messages to the user.
 WGET() { wget "$1" --quiet --show-progress; }
@@ -94,57 +94,50 @@ DO_SELECTION() {
   case "${GET_OPTION}" in
   1)
     clear
-    NOTIFY "Zsh setopt"
     $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
-    MSG_OK "Added setopt"
+    NOTIFY "Added setopt"
     sleep 2
     ;;
   2)
     clear
-    NOTIFY "Zsh zstyle"
     $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
-    MSG_OK "Added zstyle"
+    NOTIFY "Added zstyle"
     sleep 2
     ;;
   3)
     clear
-    NOTIFY "Creating oh-my-zsh library"
     $DOWNLOAD "$ZI_OMZ_LIB_URL" "$ZI_OMZ_LIB"
-    MSG_OK "Added oh-my-zsh library"
+    NOTIFY "Added oh-my-zsh library"
     sleep 2
     ;;
   4)
     clear
-    NOTIFY "Creating oh-my-zsh plugins"
     $DOWNLOAD "$ZI_OMZ_PLUG_URL" "$ZI_OMZ_PLUG"
-    MSG_OK "Added oh-my-zsh plugins"
+    NOTIFY "Added oh-my-zsh plugins"
     sleep 2
     ;;
   5)
     clear
-    NOTIFY "Creating annexes + meta plugins"
     $DOWNLOAD "$ZI_ANNEX_META_URL" "$ZI_ANNEX_META"
-    MSG_OK "Added annexes + meta plugins"
+    NOTIFY "Added annexes + meta plugins"
     sleep 2
     ;;
   6)
     clear
-    NOTIFY "Creating recommended plugins"
     $DOWNLOAD "$ZI_REC_PLUG_URL" "$ZI_REC_PLUG"
-    MSG_OK "Added recommended plugins"
+    NOTIFY "Added recommended plugins"
     sleep 2
     ;;
   7)
     clear
-    NOTIFY "Creating powerlevel10k theme"
     $DOWNLOAD "$ZI_P10K_HEAD_URL" "$ZI_P10K_HEAD"
     $DOWNLOAD "$ZI_P10K_PROMT_URL" "$ZI_P10K_PROMT"
-    MSG_OK "Added powerlevel10k theme"
+    NOTIFY "Added powerlevel10k theme"
     sleep 2
     ;;
   c | C)
     clear
-    NOTIFY "Creatting .zshrc"
+    NOTIFY "Creating .zshrc"
     sleep 1
     CREATE_ZSHRC
     MSG_OK "Created .zshrc"

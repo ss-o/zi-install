@@ -4,9 +4,9 @@
 WORKDIR="$(mktemp -d)"
 GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
-PBAR_URL="https://raw.githubusercontent.com/z-shell/zi/main/lib/zsh/git-process-output.zsh"
+: PBAR_URL="https://raw.githubusercontent.com/z-shell/zi/main/lib/zsh/git-process-output.zsh"
 ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-init.sh"
-PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
+: PROGRESS_BAR="${WORKDIR}/git-process-output.zsh"
 ZI_INIT="${WORKDIR}/script-init.zsh"
 
 # Hardcoding is something that should be avoided as much as possible.
@@ -52,12 +52,12 @@ GET_SOURCE() {
     echo -e "Unable to download zi-init.zsh, please check your internet connection."
     exit 1
   fi
-  if [[ ! -f "$PROGRESS_BAR" ]]; then
-    $DOWNLOAD "$PBAR_URL" "$PROGRESS_BAR" && command chmod g-rwX "$PROGRESS_BAR"
-  else
-    echo -e "Unable to download the progress bar"
-    exit 1
-  fi
+  #if [[ ! -f "$PROGRESS_BAR" ]]; then
+  #  $DOWNLOAD "$PBAR_URL" "$PROGRESS_BAR" && command chmod a+x "$PROGRESS_BAR"
+  #else
+  #  echo -e "Unable to download the progress bar"
+  #  exit 1
+  #fi
   # shellcheck disable=SC1090
   source "$ZI_INIT"
 }
@@ -80,14 +80,15 @@ DO_INSTALL() {
     MSG_NOTE "We found ❮ ZI ❯ directory. Updating..."
     MSG_INFO "Re-initializing Z-Shell ❮ ZI ❯ at ${ZI_HOME}/${ZI_BIN_DIR}"
     git clean -d -f -f && MSG_INFO "Cleaned up the repository"
-    git reset -q --hard HEAD && MSG_INFO "Reseting the index and working tree"
+    git reset -q --hard HEAD && MSG_INFO "Re-initializing the index and working tree"
     MSG_OK "❮ ZI ❯ Version: $(GIT_V)"
   fi
   if [[ ! -f "$ZI_SOURCE" ]]; then
     builtin cd "$ZI_HOME" || ERROR "Something went wrong while changing directory"
     MSG_NOTE "Installing the (\033[34;01m…Z-Shell…\033[36;01m …❮ ZI ❯…)\033[0m"
     MSG_NOTE "Interactive feature-rich plugin manager for (\033[34;01m…ZSH…\033[36;01m)\033[0m"
-    { GIT_E clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { $PROGRESS_BAR || cat; }; } 2>/dev/null
+    ##{ command git clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}" 2>&1 | { $PROGRESS_BAR || cat; }; } 2>/dev/null
+    command git clone -q "${GIT_R}/${ZI_REPO}" "${ZI_HOME}/${ZI_BIN_DIR}"
     if [[ -f "$ZI_SOURCE" ]]; then
       builtin cd "${ZI_BIN_DIR}" || ERROR "Something went wrong while changing directory"
       MSG_OK "❮ ZI ❯ Installed successfully"

@@ -1,4 +1,4 @@
-name: CI
+name: ZI Install CI
 on:
   push:
     branches: [ main ]
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Temporary test
+      - name: Test install
         run: |
           sudo apt update && sudo apt-get install zsh -q
           bash lib/exec/install.sh

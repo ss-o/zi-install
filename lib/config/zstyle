@@ -1,12 +1,9 @@
-# Remove '#' from the following line to enable.
-
+# Remove '#' to enable
 # Fuzzy matching of completions for when you mistype them:
 #zstyle ':completion:*' completer _complete _match _approximate
 #zstyle ':completion:*:match:*' original only
 #zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
-
 # Pretty completions
-# Remove '#' from the following line to enable.
 #zstyle ':completion:*:matches' group 'yes'
 #zstyle ':completion:*:options' description 'yes'
 #zstyle ':completion:*:options' auto-description '%d'

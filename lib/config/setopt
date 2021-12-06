@@ -1,24 +1,23 @@
-# (you can use 'setopt' command to show options enabled and 'unsetopt' to show which are not enabled)
-# Remove '#' to enable
-#setopt bang_hist               # Treat The '!' Character Specially During Expansion.
-#setopt hist_ignore_all_dups    # remove older duplicate entries from history
-#setopt hist_expire_dups_first  # Expire A Duplicate Event First When Trimming History.
-#setopt hist_ignore_dups        # Do Not Record An Event That Was Just Recorded Again.
-#setopt hist_reduce_blanks      # remove superfluous blanks from history items
-#setopt hist_find_no_dups       # Do Not Display A Previously Found Event.
-#setopt hist_ignore_space       # Do Not Record An Event Starting With A Space.
-#setopt hist_save_no_dups       # Do Not Write A Duplicate Event To The History File.
-#setopt hist_verify             # Do Not Execute Immediately Upon History Expansion.
-#setopt append_history          # Allow multiple terminal sessions to all append to one zsh command history
-#setopt extended_history        # Show Timestamp In History.
-#setopt inc_append_history      # Write To The History File Immediately, Not When The Shell Exits.
-#setopt share_history           # share history between different instances of the shell
-#setopt multios                 # perform implicit tees or cats when multiple redirections are attempted
-#setopt interactive_comments    # Allow comments even in interactive shells (especially for Muness)
-#setopt pushd_ignore_dups       # don't push multiple copies of the same directory onto the directory stack
-#setopt auto_cd                 # cd by typing directory name if it's not a command
-#setopt no_beep                 # don't beep on error
-#setopt auto_list               # automatically list choices on ambiguous completion
-#setopt auto_menu               # automatically use menu completion
-#setopt auto_pushd              # make cd push the old directory onto the directory stack
-#setopt pushdminus              # swapped the meaning of cd +1 and cd -1; we want them to mean the opposite of what they mean
+# You can use 'setopt' command to show options enabled and 'unsetopt' to show which are disabled). Remove '#' to enable
+#setopt bang_hist              # Treat The '!' Character Specially During Expansion.
+#setopt hist_ignore_all_dups   # remove older duplicate entries from history
+#setopt hist_expire_dups_first # Expire A Duplicate Event First When Trimming History.
+#setopt hist_ignore_dups       # Do Not Record An Event That Was Just Recorded Again.
+#setopt hist_reduce_blanks     # remove superfluous blanks from history items
+#setopt hist_find_no_dups      # Do Not Display A Previously Found Event.
+#setopt hist_ignore_space      # Do Not Record An Event Starting With A Space.
+#setopt hist_save_no_dups      # Do Not Write A Duplicate Event To The History File.
+#setopt hist_verify            # Do Not Execute Immediately Upon History Expansion.
+#setopt append_history         # Allow multiple terminal sessions to all append to one zsh command history
+#setopt extended_history       # Show Timestamp In History.
+#setopt inc_append_history     # Write To The History File Immediately, Not When The Shell Exits.
+#setopt share_history          # share history between different instances of the shell
+#setopt multios                # perform implicit tees or cats when multiple redirections are attempted
+#setopt interactive_comments   # Allow comments even in interactive shells (especially for Muness)
+#setopt pushd_ignore_dups      # don't push multiple copies of the same directory onto the directory stack
+#setopt auto_cd                # cd by typing directory name if it's not a command
+#setopt no_beep                # don't beep on error
+#setopt auto_list              # automatically list choices on ambiguous completion
+#setopt auto_menu              # automatically use menu completion
+#setopt auto_pushd             # make cd push the old directory onto the directory stack
+#setopt pushdminus             # swapped the meaning of cd +1 and cd -1; we want them to mean the opposite of what they mean

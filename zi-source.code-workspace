@@ -36,7 +36,10 @@
 		"files.trimFinalNewlines": true,
 		"files.trimTrailingWhitespace": true,
 		"editor.detectIndentation": false,
-		"workbench.tree.indent": 16
+    "workbench.tree.indent": 16,
+    "cSpell.ignoreWords": [
+      "ZDOTDIR"
+    ]
 	},
 	"extensions": {
 		"recommendations": [

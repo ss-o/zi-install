@@ -22,7 +22,7 @@ ZI_OMZ_THEME_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/conf
 ZI_REC_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rec-plugins"
 ZI_CONSOLE_TOOLS_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/console-tools"
 ZI_EXT_GIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/ext-git"
-ZI_SHARKDP_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/sharkdp"
+: ZI_SHARKDP_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/sharkdp"
 ZI_RUST_UTILS_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rust-utils"
 ZI_ZSH_USERS_FAST_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/zsh-users%2Bfast"
 
@@ -39,7 +39,7 @@ ZI_OMZ_THEME="${WORKDIR}/omzt-robbyrussell"
 ZI_REC_PLUG="${WORKDIR}/rec-plugins"
 ZI_CONSOLE_TOOLS="${WORKDIR}/console-tools"
 ZI_EXT_GIT="${WORKDIR}/ext-git"
-ZI_SHARKDP="${WORKDIR}/sharkdp"
+: ZI_SHARKDP="${WORKDIR}/sharkdp"
 ZI_RUST_UTILS="${WORKDIR}/rust-utils"
 ZI_ZSH_USERS_FAST="${WORKDIR}/zsh-users-fast"
 
@@ -90,7 +90,7 @@ $TPDIM# ---============================================--- # $TPRESET
   $(CECHO '-green' '2)') Oh-My-Zsh library
   $(CECHO '-green' '3)') Oh-My-Zsh plugins
   $(CECHO '-green' '4)') Console tools + Fuzzy
-  $(CECHO '-green' '5)') Exetended Git + Sharkdp
+  $(CECHO '-green' '5)') Exetended Git tools
   $(CECHO '-green' '6)') Rust utilities
   $(CECHO '-green' '7)') Zsh-Users + Fast-Syntax + History-MW
   $(CECHO '-green' '8)') Recommended plugins
@@ -142,9 +142,6 @@ DO_SELECTION() {
     clear
     $DOWNLOAD "$ZI_EXT_GIT_URL" "$ZI_EXT_GIT"
     NOTIFY "Added Extended Git tools"
-    sleep 2
-    $DOWNLOAD "$ZI_SHARKDP_URL" "$ZI_SHARKDP"
-    NOTIFY "Added Sharkdp"
     sleep 2
     ;;
   6)
@@ -244,9 +241,6 @@ CREATE_ZSHRC() {
   fi
   if [[ -f "$ZI_EXT_GIT" ]]; then
     cat "$ZI_EXT_GIT" >>"${HOME}/.zshrc"
-  fi
-  if [[ -f "$ZI_SHARKDP" ]]; then
-    cat "$ZI_SHARKDP" >>"${HOME}/.zshrc"
   fi
   if [[ -f "$ZI_RUST_UTILS" ]]; then
     cat "$ZI_RUST_UTILS" >>"${HOME}/.zshrc"

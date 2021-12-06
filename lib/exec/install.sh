@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 [[ -n "$ENABLE_DEBUG_MODE" ]] && set -x
 
+NO_TTY="${NO_TTY:-no}"
+PIPED="${PIPED:-no}"
 WORKDIR="$(mktemp -d)"
 GIT_R="https://github.com"
 ZI_REPO="${ZINIT_REPO:-z-shell/zi.git}"
@@ -24,6 +26,9 @@ WGET() { wget "$1" --quiet --show-progress; }
 CURL() { curl -fSL --progress-bar "$1" -o "$2"; }
 CMD() { command -v "$1" >/dev/null 2>&1; }
 EXEC() { type -fP "$1" >/dev/null 2>&1; }
+HAS_TERMINAL() { [ -t 0 ]; }
+IS_TTY() { HAS_TERMINAL; }
+IS_PIPED() { ! [ -t 1 ]; }
 GIT_E() { command git -C "${ZI_HOME}/${ZI_BIN_DIR}" "$@"; }
 GIT_V() { GIT_E describe --tags 2>/dev/null; }
 GIT_O() { GIT_E config -l | grep remote.origin.url | awk -F'=' '{print $2}'; }
@@ -119,6 +124,12 @@ DO_INSTALL() {
 MAIN() {
   PRE_CHECKS
   GET_SOURCE && SET_COLORS
+  if HAS_TERMINAL; then
+    TERM="xterm-256color"
+  fi
+  if ! IS_TTY; then
+    NO_TTY=yes
+  fi
   DO_INSTALL
   MSG_INFO "For additional questions or support please visit:      "
   MSG_NOTE "Discussions:  https://github.com/z-shell/zi/discussions"

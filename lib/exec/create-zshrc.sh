@@ -112,7 +112,7 @@ DO_SELECTION() {
     clear
     $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
     NOTIFY "Added setopt"
-    sleep 2
+    sleep 1
     $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
     NOTIFY "Added zstyle"
     sleep 2
@@ -133,7 +133,7 @@ DO_SELECTION() {
     clear
     $DOWNLOAD "$ZI_CONSOLE_TOOLS_URL" "$ZI_CONSOLE_TOOLS"
     NOTIFY "Added Console-tools"
-    sleep 2
+    sleep 1
     $DOWNLOAD "$ZI_FUZZY_URL" "$ZI_FUZZY"
     NOTIFY "Added Fuzzy"
     sleep 2
@@ -172,14 +172,14 @@ DO_SELECTION() {
   c | C)
     clear
     NOTIFY "Creating .zshrc"
-    sleep 2
+    sleep 1
     CREATE_ZSHRC
     MSG_OK "Created .zshrc"
-    sleep 2
+    sleep 1
     MSG_NOTE "Review/edit your .zshrc file"
-    sleep 2
+    sleep 1
     MSG_NOTE "Reload your shell for changes to take effect"
-    sleep 2
+    sleep 1
     CLEANUP
     exit 0
     ;;

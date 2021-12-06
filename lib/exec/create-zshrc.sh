@@ -9,27 +9,39 @@ ZI_INIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/script-in
 ZI_INIT="${WORKDIR}/script-init.sh"
 ZI_ZSHRC="${HOME}/.zshrc"
 
+ZI_ANNEX_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/annexes"
 ZI_P10K_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-head"
 ZI_P10K_PROMT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/p10k-prompt"
 ZI_HEAD_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/head"
 ZI_SETOPT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/setopt"
 ZI_ZSTYLE_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/zstyle"
-ZI_ANNEX_META_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/annex-meta-plugins"
+ZI_FUZZY_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/fuzzy"
 ZI_OMZ_LIB_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omz-lib"
 ZI_OMZ_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omz-plugins"
 ZI_OMZ_THEME_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/omzt-robbyrussell"
 ZI_REC_PLUG_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rec-plugins"
+ZI_CONSOLE_TOOLS_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/console-tools"
+ZI_EXT_GIT_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/ext-git"
+ZI_SHARKDP_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/sharkdp"
+ZI_RUST_UTILS_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/rust-utils"
+ZI_ZSH_USERS_FAST_URL="https://raw.githubusercontent.com/ss-o/zi-source/main/lib/config/zsh-users%2Bfast"
 
+ZI_ANNEX="${WORKDIR}/annexes"
 ZI_P10K_HEAD="${WORKDIR}/p10k-head"
 ZI_P10K_PROMT="${WORKDIR}/p10k-prompt"
 ZI_HEAD="${WORKDIR}/head"
 ZI_SETOPT="${WORKDIR}/setopt"
 ZI_ZSTYLE="${WORKDIR}/zstyle"
-ZI_ANNEX_META="${WORKDIR}/annex-meta-plugins"
+ZI_FUZZY="${WORKDIR}/fuzzy"
 ZI_OMZ_LIB="${WORKDIR}/omz-lib"
 ZI_OMZ_PLUG="${WORKDIR}/omz-plugins"
 ZI_OMZ_THEME="${WORKDIR}/omzt-robbyrussell"
 ZI_REC_PLUG="${WORKDIR}/rec-plugins"
+ZI_CONSOLE_TOOLS="${WORKDIR}/console-tools"
+ZI_EXT_GIT="${WORKDIR}/ext-git"
+ZI_SHARKDP="${WORKDIR}/sharkdp"
+ZI_RUST_UTILS="${WORKDIR}/rust-utils"
+ZI_ZSH_USERS_FAST="${WORKDIR}/zsh-users-fast"
 
 # Message functions to print messages to the user.
 WGET() { wget "$1" --quiet --show-progress; }
@@ -74,13 +86,15 @@ SHOW_MENU() {
     echo -ne "
 $TPGREEN❮ ZI ❯ Source$TPRESET
 $TPDIM# ---============================================--- # $TPRESET
-  $(CECHO '-green' '1)') Add setopt
-  $(CECHO '-green' '2)') Add zstyle
-  $(CECHO '-green' '3)') Oh-My-Zsh library
-  $(CECHO '-green' '4)') Oh-My-Zsh plugins
-  $(CECHO '-green' '5)') Annexes + meta plugins
-  $(CECHO '-green' '6)') Recommended plugins
-  $(CECHO '-green' '7)') Powerlevel10k theme
+  $(CECHO '-green' '1)') Add setopt + zstyle
+  $(CECHO '-green' '2)') Oh-My-Zsh library
+  $(CECHO '-green' '3)') Oh-My-Zsh plugins
+  $(CECHO '-green' '4)') Console tools + Fuzzy
+  $(CECHO '-green' '5)') Exetended Git + Sharkdp
+  $(CECHO '-green' '6)') Rust utilities
+  $(CECHO '-green' '7)') Zsh-Users + Fast-Syntax + History-MW
+  $(CECHO '-green' '8)') Recommended plugins
+  $(CECHO '-green' '9)') Powerlevel10k theme
   $(CECHO '-yellow' 'c)') Continue to create .zshrc
   $(CECHO '-line')
   $(CECHO '-red' 'q)') Exit
@@ -99,38 +113,59 @@ DO_SELECTION() {
     $DOWNLOAD "$ZI_SETOPT_URL" "$ZI_SETOPT"
     NOTIFY "Added setopt"
     sleep 2
-    ;;
-  2)
-    clear
     $DOWNLOAD "$ZI_ZSTYLE_URL" "$ZI_ZSTYLE"
     NOTIFY "Added zstyle"
     sleep 2
     ;;
-  3)
+  2)
     clear
     $DOWNLOAD "$ZI_OMZ_LIB_URL" "$ZI_OMZ_LIB"
     NOTIFY "Added oh-my-zsh library"
     sleep 2
     ;;
-  4)
+  3)
     clear
     $DOWNLOAD "$ZI_OMZ_PLUG_URL" "$ZI_OMZ_PLUG"
     NOTIFY "Added oh-my-zsh plugins"
     sleep 2
     ;;
+  4)
+    clear
+    $DOWNLOAD "$ZI_CONSOLE_TOOLS_URL" "$ZI_CONSOLE_TOOLS"
+    NOTIFY "Added Console-tools"
+    sleep 2
+    $DOWNLOAD "$ZI_FUZZY_URL" "$ZI_FUZZY"
+    NOTIFY "Added Fuzzy"
+    sleep 2
+    ;;
   5)
     clear
-    $DOWNLOAD "$ZI_ANNEX_META_URL" "$ZI_ANNEX_META"
-    NOTIFY "Added annexes + meta plugins"
+    $DOWNLOAD "$ZI_EXT_GIT_URL" "$ZI_EXT_GIT"
+    NOTIFY "Added Extended Git tools"
+    sleep 2
+    $DOWNLOAD "$ZI_SHARKDP_URL" "$ZI_SHARKDP"
+    NOTIFY "Added Sharkdp"
     sleep 2
     ;;
   6)
     clear
-    $DOWNLOAD "$ZI_REC_PLUG_URL" "$ZI_REC_PLUG"
-    NOTIFY "Added recommended plugins"
+    $DOWNLOAD "$ZI_RUST_UTILS_URL" "$ZI_RUST_UTILS"
+    NOTIFY "Added Rust utilities"
     sleep 2
     ;;
   7)
+    clear
+    $DOWNLOAD "$ZI_ZSH_USERS_FAST_URL" "$ZI_ZSH_USERS_FAST"
+    NOTIFY "Added Zsh-Users + Fast-Syntax + History-MW"
+    sleep 2
+    ;;
+  8)
+    clear
+    $DOWNLOAD "$ZI_REC_PLUG_URL" "$ZI_REC_PLUG"
+    NOTIFY "Added Recommended plugins"
+    sleep 2
+    ;;
+  9)
     clear
     $DOWNLOAD "$ZI_P10K_HEAD_URL" "$ZI_P10K_HEAD"
     $DOWNLOAD "$ZI_P10K_PROMT_URL" "$ZI_P10K_PROMT"
@@ -197,8 +232,27 @@ CREATE_ZSHRC() {
   if [[ -f "$ZI_OMZ_PLUG" ]]; then
     cat "$ZI_OMZ_PLUG" >>"${HOME}/.zshrc"
   fi
-  if [[ -f "$ZI_ANNEX_META" ]]; then
-    cat "$ZI_ANNEX_META" >>"${HOME}/.zshrc"
+  if [[ ! -f "$ZI_ANNEX" ]]; then
+    $DOWNLOAD "$ZI_ANNEX_URL" "$ZI_ANNEX"
+    cat "$ZI_ANNEX" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_CONSOLE_TOOLS" ]]; then
+    cat "$ZI_CONSOLE_TOOLS" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_FUZZY" ]]; then
+    cat "$ZI_FUZZY" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_EXT_GIT" ]]; then
+    cat "$ZI_EXT_GIT" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_SHARKDP" ]]; then
+    cat "$ZI_SHARKDP" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_RUST_UTILS" ]]; then
+    cat "$ZI_RUST_UTILS" >>"${HOME}/.zshrc"
+  fi
+  if [[ -f "$ZI_ZSH_USERS_FAST" ]]; then
+    cat "$ZI_ZSH_USERS_FAST" >>"${HOME}/.zshrc"
   fi
   if [[ -f "$ZI_REC_PLUG" ]]; then
     cat "$ZI_REC_PLUG" >>"${HOME}/.zshrc"
@@ -249,6 +303,14 @@ DO_OPTIONS() {
       ;;
     -7)
       GET_OPTION="7"
+      DO_SELECTION
+      ;;
+    -8)
+      GET_OPTION="8"
+      DO_SELECTION
+      ;;
+    -9)
+      GET_OPTION="9"
       DO_SELECTION
       ;;
     -c)

@@ -1,5 +1,4 @@
 # Theme oh-my-zsh - robbyrussell
-autoload -U colors && colors
-setopt prompt_subst && setopt promptsubst
+autoload -U colors && colors && setopt promptsubst
 zi wait'!' lucid for OMZL::prompt_info_functions.zsh \
   OMZT::robbyrussell
